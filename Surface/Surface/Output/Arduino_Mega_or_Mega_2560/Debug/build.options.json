@@ -1,0 +1,11 @@
+{
+  "additionalFiles": "",
+  "builtInLibrariesFolders": "F:\\arduino-1.8.9\\Arduino\\libraries",
+  "customBuildProperties": "",
+  "fqbn": "arduino:avr:mega:cpu=atmega2560",
+  "hardwareFolders": "F:\\arduino-1.8.9\\Arduino\\hardware,C:\\Users\\zyn77\\Documents\\ArduinoData\\packages",
+  "otherLibrariesFolders": "C:\\Users\\zyn77\\Documents\\Arduino\\Libraries",
+  "runtime.ide.version": "10600",
+  "sketchLocation": "F:\\Emb\\OurEDA-S2L\\Surface\\Surface\\sketches\\Surface.ino",
+  "toolsFolders": "F:/arduino-1.8.9/Arduino/tools-builder,F:/arduino-1.8.9/Arduino/hardware/tools/avr,C:\\Users\\zyn77\\Documents/ArduinoData/packages"
+}

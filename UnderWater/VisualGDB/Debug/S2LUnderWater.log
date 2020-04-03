@@ -1,0 +1,43 @@
+﻿  stm32f4xx_it.c
+  stm32f4xx_hal_msp.c
+  stm32f4xx_hal_timebase_tim.c
+  main.c
+  system_stm32f4xx.c
+  stm32f4xx_hal.c
+  stm32f4xx_hal_adc.c
+  stm32f4xx_hal_adc_ex.c
+  stm32f4xx_hal_exti.c
+  stm32f4xx_hal_uart.c
+  stm32f4xx_hal_pwr.c
+  stm32f4xx_hal_pwr_ex.c
+  stm32f4xx_hal_flash.c
+  stm32f4xx_hal_flash_ex.c
+  stm32f4xx_hal_flash_ramfunc.c
+  stm32f4xx_hal_gpio.c
+  stm32f4xx_hal_iwdg.c
+  stm32f4xx_hal_rcc.c
+  stm32f4xx_hal_rcc_ex.c
+  stm32f4xx_hal_cortex.c
+  stm32f4xx_hal_tim.c
+  stm32f4xx_hal_tim_ex.c
+  stm32f4xx_hal_dma_ex.c
+  stm32f4xx_hal_dma.c
+  stm32f4xx_hal_i2c.c
+  stm32f4xx_hal_i2c_ex.c
+  startup_stm32f407xx.c
+  freertos.c
+  croutine.c
+  event_groups.c
+  list.c
+  queue.c
+  stream_buffer.c
+  tasks.c
+  timers.c
+  heap_4.c
+  port.c
+  cmsis_os.c
+  Linking VisualGDB/Debug/S2LUnderWater...
+  ------------------- Memory utilization report -------------------
+  Used FLASH: 24KB out of 512KB (4%)
+  Used SRAM: 17KB out of 128KB (14%)
+  Used CCMRAM: 0 bytes out of 64KB (0%)
