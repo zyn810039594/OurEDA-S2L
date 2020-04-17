@@ -3,7 +3,7 @@ Microsoft Visual Studio Solution File, Format Version 12.00
 # Visual Studio Version 16
 VisualStudioVersion = 16.0.29519.87
 MinimumVisualStudioVersion = 10.0.40219.1
-Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "S2LUnderWater", "S2LUnderWater.vcxproj", "{30F33033-D10A-4867-B7B6-A331EFD68C6F}"
+Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "S2LUnderwater", "S2LUnderwater.vcxproj", "{4C5F0D61-2D61-4A52-ADDC-D124F02CA80D}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
@@ -11,15 +11,15 @@ Global
 		Release|VisualGDB = Release|VisualGDB
 	EndGlobalSection
 	GlobalSection(ProjectConfigurationPlatforms) = postSolution
-		{30F33033-D10A-4867-B7B6-A331EFD68C6F}.Debug|VisualGDB.ActiveCfg = Debug|VisualGDB
-		{30F33033-D10A-4867-B7B6-A331EFD68C6F}.Debug|VisualGDB.Build.0 = Debug|VisualGDB
-		{30F33033-D10A-4867-B7B6-A331EFD68C6F}.Release|VisualGDB.ActiveCfg = Release|VisualGDB
-		{30F33033-D10A-4867-B7B6-A331EFD68C6F}.Release|VisualGDB.Build.0 = Release|VisualGDB
+		{4C5F0D61-2D61-4A52-ADDC-D124F02CA80D}.Debug|VisualGDB.ActiveCfg = Debug|VisualGDB
+		{4C5F0D61-2D61-4A52-ADDC-D124F02CA80D}.Debug|VisualGDB.Build.0 = Debug|VisualGDB
+		{4C5F0D61-2D61-4A52-ADDC-D124F02CA80D}.Release|VisualGDB.ActiveCfg = Release|VisualGDB
+		{4C5F0D61-2D61-4A52-ADDC-D124F02CA80D}.Release|VisualGDB.Build.0 = Release|VisualGDB
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
 	EndGlobalSection
 	GlobalSection(ExtensibilityGlobals) = postSolution
-		SolutionGuid = {6A3F0625-4CBA-4B7F-85FA-9C034462343F}
+		SolutionGuid = {CDC6803D-D937-41F3-915E-F958D4FCA132}
 	EndGlobalSection
 EndGlobal

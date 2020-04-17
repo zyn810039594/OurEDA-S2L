@@ -1,11 +1,11 @@
 {
   "additionalFiles": "",
   "builtInLibrariesFolders": "F:\\arduino-1.8.9\\Arduino\\libraries",
-  "customBuildProperties": "",
+  "builtInToolsFolders": "F:/arduino-1.8.9/Arduino/tools-builder,F:/arduino-1.8.9/Arduino/hardware/tools/avr,C:\\Users\\zyn77\\Documents/ArduinoData/packages",
+  "customBuildProperties": "runtime.tools.ctags.path=C:\\Users\\zyn77\\AppData\\Local\\VisualGDB\\Arduino\\tools-builder\\ctags\\5.8-arduino11",
   "fqbn": "arduino:avr:mega:cpu=atmega2560",
   "hardwareFolders": "F:\\arduino-1.8.9\\Arduino\\hardware,C:\\Users\\zyn77\\Documents\\ArduinoData\\packages",
   "otherLibrariesFolders": "C:\\Users\\zyn77\\Documents\\Arduino\\Libraries",
   "runtime.ide.version": "10600",
-  "sketchLocation": "F:\\Emb\\OurEDA-S2L\\Surface\\Surface\\sketches\\Surface.ino",
-  "toolsFolders": "F:/arduino-1.8.9/Arduino/tools-builder,F:/arduino-1.8.9/Arduino/hardware/tools/avr,C:\\Users\\zyn77\\Documents/ArduinoData/packages"
+  "sketchLocation": "F:\\Emb\\OurEDA-S2L\\Surface\\Surface\\sketches\\Surface.ino"
 }

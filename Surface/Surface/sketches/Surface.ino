@@ -33,39 +33,48 @@
 #define SerialBaud 115200
 
 //发送频率 单位Hz
-const u16 SendFreq = 25;
+#define SendFreq 25
 
 //自动模式数据调节
-//翻转初始角度 0~1023
-const u16 InitFlipAngle = 512;
-//翻转角度 0~1023
-const u16 FlipAngle = 512;
+//翻转初始角度
+#define InitFlipAngle 1500
+//翻转角度
+#define FlipAngle 1500
 //翻转持续时间 单位毫秒
-const u16 FlipTime = 1000;
-//夹取初始/释放角度 0~1023
-const u16 InitClipAngle = 512;
-//抓取角度 0~1023
-const u16 ClipAngle = 512;
+#define FlipTime 1000
+//夹取初始/释放角度
+#define InitClipAngle 1500
+//抓取角度
+#define ClipAngle 1500
 //夹取持续时间 单位毫秒
-const u16 ClipTime = 1000;
+#define ClipTime 1000
 //夹取释放时间 单位毫秒
-const u16 DisClipTime = 1000;
+#define DisClipTime 1000
 
-//前进后退与侧推反向
-//前进后退反向 0正向 1反向
-const u8 PortraitSide = 0;
-//旋转反向 0正向 1反向
-const u8 RotateSide = 0;
-//上下反向 0正向 1反向
-const u8 VerticalSide = 0;
-
-//舵机反向
-//夹取舵机反向 0正向 1反向
-const u8 ClipSide = 0;
-//翻转舵机反向 0正向 1反向
-const u8 FlipSide = 0;
-//云台反向 0正向 1反向
-const u8 PTZSide = 0;
+//PWM输出范围 若想反向直接把高低换个个儿
+//前进后退与侧推
+//前进后退
+#define PortraitHigh 2500
+#define PortraitLow 500
+//旋转
+#define RotateHigh 2500
+#define RotateLow 500
+//上下
+#define VerticalHigh 2500
+#define VerticalLow 500
+//舵机范围
+//夹取舵机
+#define ClipHigh 2500
+#define ClipLow 500
+//翻转舵机
+#define FlipHigh 2500
+#define FlipLow 500
+//云台
+#define PTZHigh 2500
+#define PTZLow 500
+//灯光
+#define LightHigh 2500
+#define LightLow 500
 
 //以下为代码部分
 
@@ -114,26 +123,27 @@ u8 FAutoClip = 0;
 u16 FClipTime = 0;
 u16 FFlipTime = 0;
 
+
 //定时器中断
 void TimerInterrupt()
 {
 	//简单处理
 	CFMode = CFStart*(FHandClip + FSemiautoClip * 2 + FAutoClip * 3);
-	*PLight = (u16)((*PLight)*FLight);
+	*PLight = (u16)map(((*PLight)*FLight), 0, 1024, LightLow, LightHigh);
 	*PGesture = (u8)(FGesture*(FPitch + 2*FRoll + 3*FPRMixed));
-	*PPortrait = (u16)*PPortrait + PortraitSide*(1024 - 2*(*PPortrait));
-	*PRotate = (u16)*PRotate + RotateSide*(1024 - 2*(*PRotate));
-	*PVertical = (u16)*PVertical + VerticalSide*(1024 - 2*(*PVertical));
-	*PPTZ = (u16)*PPTZ + PTZSide*(1024 - 2*(*PPTZ));
+	*PPortrait = (u16)map(*PPortrait, 0, 1024, PortraitLow, PortraitHigh);
+	*PRotate = (u16)map(*PRotate, 0, 1024, RotateLow, RotateHigh);
+	*PVertical = (u16)map(*PVertical, 0, 1024, VerticalLow, VerticalHigh);
+	*PPTZ = (u16)map(*PPTZ, 0, 1024, PTZLow, PTZHigh);
 	//自动夹取代码
-	switch (CFMode)
+	switch(CFMode)
 	{
 	case 1:
-		*PClip = (u16)*PClip + ClipSide*(1024 - (*PClip));
-		*PFlip = (u16)*PFlip + FlipSide*(1024 - 2*(*PFlip));
+		*PClip = (u16)map(*PClip, 0, 1024, ClipLow, ClipHigh);
+		*PFlip = (u16)map(*PFlip, 0, 1024, FlipLow, FlipHigh);
 		break;
 	case 2:
-		*PClip = (u16)*PClip + ClipSide*(1024 - (*PClip));
+		*PClip = (u16)map(*PClip, 0, 1024, ClipLow, ClipHigh);
 		switch (CFStart)
 		{
 		case 0:
@@ -211,7 +221,7 @@ void setup()
 	pinMode(StandardMode, INPUT);
 	pinMode(MaxSpeedMode, INPUT);
 	pinMode(HandClip, INPUT);
-	pinMode(SemiautoClip,INPUT);
+	pinMode(SemiautoClip, INPUT);
 	pinMode(AutoClip, INPUT);
 	Serial.begin(SerialBaud);
 	//开辟字符串用内存空间
@@ -231,14 +241,6 @@ void setup()
 	PMode = SendString + 18;
 	PGesture = SendString + 19;
 	delay(4000);
-	//机器人初始化指令发送
-	SendString[0] = 0x25;
-	for (int i = 1; i < 20; ++i)
-	{
-		SendString[i] = 0xFF;
-	}
-	SendString[20] = 0x21;
-	Serial.write(SendString, 21);
 	//开启定时器中断，开始运行
 	FlexiTimer2::set(Latency, TimerInterrupt);
 	FlexiTimer2::start();

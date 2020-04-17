@@ -1,0 +1,15 @@
+underwater\event_groups.o: ../Middlewares/Third_Party/FreeRTOS/Source/event_groups.c
+underwater\event_groups.o: F:\keil\ARM\ARMCC\Bin\..\include\stdlib.h
+underwater\event_groups.o: ../Middlewares/Third_Party/FreeRTOS/Source/include/FreeRTOS.h
+underwater\event_groups.o: F:\keil\ARM\ARMCC\Bin\..\include\stddef.h
+underwater\event_groups.o: F:\keil\ARM\ARMCC\Bin\..\include\stdint.h
+underwater\event_groups.o: ../Inc/FreeRTOSConfig.h
+underwater\event_groups.o: ../Middlewares/Third_Party/FreeRTOS/Source/include/projdefs.h
+underwater\event_groups.o: ../Middlewares/Third_Party/FreeRTOS/Source/include/portable.h
+underwater\event_groups.o: ../Middlewares/Third_Party/FreeRTOS/Source/include/deprecated_definitions.h
+underwater\event_groups.o: ../Middlewares/Third_Party/FreeRTOS/Source/portable/RVDS/ARM_CM4F/portmacro.h
+underwater\event_groups.o: ../Middlewares/Third_Party/FreeRTOS/Source/include/mpu_wrappers.h
+underwater\event_groups.o: ../Middlewares/Third_Party/FreeRTOS/Source/include/task.h
+underwater\event_groups.o: ../Middlewares/Third_Party/FreeRTOS/Source/include/list.h
+underwater\event_groups.o: ../Middlewares/Third_Party/FreeRTOS/Source/include/timers.h
+underwater\event_groups.o: ../Middlewares/Third_Party/FreeRTOS/Source/include/event_groups.h

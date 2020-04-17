@@ -48,7 +48,7 @@
     <AllDependencies>
       <ProjectDependency>
         <RelativePath>UnderWater.gpdsc</RelativePath>
-        <Timestamp>132297744923159336</Timestamp>
+        <Timestamp>132316185002310518</Timestamp>
       </ProjectDependency>
     </AllDependencies>
     <RootDirectory>
@@ -406,6 +406,7 @@
     </RootDirectory>
     <Configurations>
       <ImportedConfiguration>
+        <IsStaticLibrary>false</IsStaticLibrary>
         <Settings>
           <IncludeDirectories>
             <string>F:\Emb\OurEDA-S2L\UnderWater\Inc</string>

@@ -55,7 +55,8 @@ VisualGDB/Debug/main.o: Src/main.c Inc/main.h \
  Middlewares/Third_Party/FreeRTOS/Source/include/semphr.h \
  Middlewares/Third_Party/FreeRTOS/Source/include/queue.h \
  Middlewares/Third_Party/FreeRTOS/Source/include/event_groups.h \
- Middlewares/Third_Party/FreeRTOS/Source/include/timers.h
+ Middlewares/Third_Party/FreeRTOS/Source/include/timers.h Inc/Attitude.h \
+ Inc/Setting.h Inc/Auto.h Inc/Display.h Inc/BasicCtrl.h
 
 Inc/main.h:
 
@@ -174,3 +175,13 @@ Middlewares/Third_Party/FreeRTOS/Source/include/queue.h:
 Middlewares/Third_Party/FreeRTOS/Source/include/event_groups.h:
 
 Middlewares/Third_Party/FreeRTOS/Source/include/timers.h:
+
+Inc/Attitude.h:
+
+Inc/Setting.h:
+
+Inc/Auto.h:
+
+Inc/Display.h:
+
+Inc/BasicCtrl.h:

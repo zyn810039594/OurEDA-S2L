@@ -1,5 +1,4 @@
 # 1 "F:\\Emb\\OurEDA-S2L\\Surface\\Surface\\sketches\\Surface.ino"
-# 1 "F:\\Emb\\OurEDA-S2L\\Surface\\Surface\\sketches\\Surface.ino"
 # 2 "F:\\Emb\\OurEDA-S2L\\Surface\\Surface\\sketches\\Surface.ino" 2
 //方便使用的定义
 
@@ -12,39 +11,48 @@
 
 
 //发送频率 单位Hz
-const unsigned short SendFreq = 25;
+
 
 //自动模式数据调节
-//翻转初始角度 0~1023
-const unsigned short InitFlipAngle = 512;
-//翻转角度 0~1023
-const unsigned short FlipAngle = 512;
+//翻转初始角度
+
+//翻转角度
+
 //翻转持续时间 单位毫秒
-const unsigned short FlipTime = 1000;
-//夹取初始/释放角度 0~1023
-const unsigned short InitClipAngle = 512;
-//抓取角度 0~1023
-const unsigned short ClipAngle = 512;
+
+//夹取初始/释放角度
+
+//抓取角度
+
 //夹取持续时间 单位毫秒
-const unsigned short ClipTime = 1000;
+
 //夹取释放时间 单位毫秒
-const unsigned short DisClipTime = 1000;
 
-//前进后退与侧推反向
-//前进后退反向 0正向 1反向
-const unsigned char PortraitSide = 0;
-//旋转反向 0正向 1反向
-const unsigned char RotateSide = 0;
-//上下反向 0正向 1反向
-const unsigned char VerticalSide = 0;
 
-//舵机反向
-//夹取舵机反向 0正向 1反向
-const unsigned char ClipSide = 0;
-//翻转舵机反向 0正向 1反向
-const unsigned char FlipSide = 0;
-//云台反向 0正向 1反向
-const unsigned char PTZSide = 0;
+//PWM输出范围 若想反向直接把高低换个个儿
+//前进后退与侧推
+//前进后退
+
+
+//旋转
+
+
+//上下
+
+
+//舵机范围
+//夹取舵机
+
+
+//翻转舵机
+
+
+//云台
+
+
+//灯光
+
+
 
 //以下为代码部分
 
@@ -68,10 +76,10 @@ unsigned char* PMode = 0;
 unsigned char* PGesture = 0;
 
 //延时计算
-const unsigned short Latency = 1000 / SendFreq;
-const unsigned short DoClipTime = ClipTime / Latency;
-const unsigned short DoFlipTime = FlipTime / Latency;
-const unsigned short DoDisClipTime = DisClipTime / Latency;
+const unsigned short Latency = 1000 / 25;
+const unsigned short DoClipTime = 1000 / Latency;
+const unsigned short DoFlipTime = 1000 / Latency;
+const unsigned short DoDisClipTime = 1000 / Latency;
 
 //灯光开关标志位
 unsigned char FLight = 0;
@@ -93,33 +101,34 @@ unsigned char FAutoClip = 0;
 unsigned short FClipTime = 0;
 unsigned short FFlipTime = 0;
 
+
 //定时器中断
 void TimerInterrupt()
 {
  //简单处理
  CFMode = CFStart*(FHandClip + FSemiautoClip * 2 + FAutoClip * 3);
- *PLight = (unsigned short)((*PLight)*FLight);
+ *PLight = (unsigned short)map(((*PLight)*FLight), 0, 1024, 500, 2500);
  *PGesture = (unsigned char)(FGesture*(FPitch + 2*FRoll + 3*FPRMixed));
- *PPortrait = (unsigned short)*PPortrait + PortraitSide*(1024 - 2*(*PPortrait));
- *PRotate = (unsigned short)*PRotate + RotateSide*(1024 - 2*(*PRotate));
- *PVertical = (unsigned short)*PVertical + VerticalSide*(1024 - 2*(*PVertical));
- *PPTZ = (unsigned short)*PPTZ + PTZSide*(1024 - 2*(*PPTZ));
+ *PPortrait = (unsigned short)map(*PPortrait, 0, 1024, 500, 2500);
+ *PRotate = (unsigned short)map(*PRotate, 0, 1024, 500, 2500);
+ *PVertical = (unsigned short)map(*PVertical, 0, 1024, 500, 2500);
+ *PPTZ = (unsigned short)map(*PPTZ, 0, 1024, 500, 2500);
  //自动夹取代码
- switch (CFMode)
+ switch(CFMode)
  {
  case 1:
-  *PClip = (unsigned short)*PClip + ClipSide*(1024 - (*PClip));
-  *PFlip = (unsigned short)*PFlip + FlipSide*(1024 - 2*(*PFlip));
+  *PClip = (unsigned short)map(*PClip, 0, 1024, 500, 2500);
+  *PFlip = (unsigned short)map(*PFlip, 0, 1024, 500, 2500);
   break;
  case 2:
-  *PClip = (unsigned short)*PClip + ClipSide*(1024 - (*PClip));
+  *PClip = (unsigned short)map(*PClip, 0, 1024, 500, 2500);
   switch (CFStart)
   {
   case 0:
-   *PFlip = InitFlipAngle;
+   *PFlip = 1500;
    break;
   case 1:
-   *PFlip = FlipAngle;
+   *PFlip = 1500;
    ++FFlipTime;
    if (FFlipTime == DoFlipTime)
    {
@@ -133,12 +142,12 @@ void TimerInterrupt()
   switch (CFStart)
   {
   case 0:
-   *PClip = InitClipAngle;
-   *PFlip = InitFlipAngle;
+   *PClip = 1500;
+   *PFlip = 1500;
    break;
   case 1:
-   *PClip = ClipAngle;
-   *PFlip = InitFlipAngle;
+   *PClip = 1500;
+   *PFlip = 1500;
    ++FClipTime;
    if (FClipTime == DoClipTime)
    {
@@ -147,8 +156,8 @@ void TimerInterrupt()
    }
    break;
   case 2:
-   *PClip = ClipAngle;
-   *PFlip = FlipAngle;
+   *PClip = 1500;
+   *PFlip = 1500;
    ++FFlipTime;
    if (FFlipTime == DoFlipTime)
    {
@@ -157,8 +166,8 @@ void TimerInterrupt()
    }
    break;
   case 3:
-   *PClip = InitClipAngle;
-   *PFlip = FlipAngle;
+   *PClip = 1500;
+   *PFlip = 1500;
    ++FClipTime;
    if (FClipTime == DoDisClipTime)
    {
@@ -190,7 +199,7 @@ void setup()
  pinMode(41, 0x0);
  pinMode(42, 0x0);
  pinMode(43, 0x0);
- pinMode(44,0x0);
+ pinMode(44, 0x0);
  pinMode(45, 0x0);
  Serial.begin(115200);
  //开辟字符串用内存空间
@@ -210,14 +219,6 @@ void setup()
  PMode = SendString + 18;
  PGesture = SendString + 19;
  delay(4000);
- //机器人初始化指令发送
- SendString[0] = 0x25;
- for (int i = 1; i < 20; ++i)
- {
-  SendString[i] = 0xFF;
- }
- SendString[20] = 0x21;
- Serial.write(SendString, 21);
  //开启定时器中断，开始运行
  FlexiTimer2::set(Latency, TimerInterrupt);
  FlexiTimer2::start();
