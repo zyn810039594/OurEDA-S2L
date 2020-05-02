@@ -526,6 +526,9 @@ void TIM7_IRQHandler(void)
 			case 15:
 				LightClipTimer = 0;
 				break;
+			default:
+				++LightClipTimer;
+				break;
 			}
 		}
 		else

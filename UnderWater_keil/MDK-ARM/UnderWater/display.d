@@ -28,8 +28,6 @@ underwater\display.o: ../Drivers/STM32F4xx_HAL_Driver/Inc/stm32f4xx_hal_adc_ex.h
 underwater\display.o: ../Drivers/STM32F4xx_HAL_Driver/Inc/stm32f4xx_hal_flash.h
 underwater\display.o: ../Drivers/STM32F4xx_HAL_Driver/Inc/stm32f4xx_hal_flash_ex.h
 underwater\display.o: ../Drivers/STM32F4xx_HAL_Driver/Inc/stm32f4xx_hal_flash_ramfunc.h
-underwater\display.o: ../Drivers/STM32F4xx_HAL_Driver/Inc/stm32f4xx_hal_i2c.h
-underwater\display.o: ../Drivers/STM32F4xx_HAL_Driver/Inc/stm32f4xx_hal_i2c_ex.h
 underwater\display.o: ../Drivers/STM32F4xx_HAL_Driver/Inc/stm32f4xx_hal_iwdg.h
 underwater\display.o: ../Drivers/STM32F4xx_HAL_Driver/Inc/stm32f4xx_hal_pwr.h
 underwater\display.o: ../Drivers/STM32F4xx_HAL_Driver/Inc/stm32f4xx_hal_pwr_ex.h
@@ -52,3 +50,4 @@ underwater\display.o: ../Middlewares/Third_Party/FreeRTOS/Source/include/semphr.
 underwater\display.o: ../Middlewares/Third_Party/FreeRTOS/Source/include/event_groups.h
 underwater\display.o: ../Inc/Display.h
 underwater\display.o: ../Inc/Setting.h
+underwater\display.o: ../Inc/BasicCtrl.h

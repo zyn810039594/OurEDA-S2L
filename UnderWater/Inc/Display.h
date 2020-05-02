@@ -6,7 +6,7 @@
 #define POSX_WARN1_LOW 0x00
 #define POSY_WARN1_HIGH 0x00
 #define POSY_WARN1_LOW 0x00
-//警告二位置
+//警告2位置
 #define POSX_WARN2_HIGH 0x00
 #define POSX_WARN2_LOW 0x00
 #define POSY_WARN2_HIGH 0x00

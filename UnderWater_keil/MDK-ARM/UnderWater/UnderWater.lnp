@@ -11,8 +11,6 @@
 "underwater\display.o"
 "underwater\stm32f4xx_hal_adc.o"
 "underwater\stm32f4xx_hal_adc_ex.o"
-"underwater\stm32f4xx_hal_i2c.o"
-"underwater\stm32f4xx_hal_i2c_ex.o"
 "underwater\stm32f4xx_hal_iwdg.o"
 "underwater\stm32f4xx_hal_tim.o"
 "underwater\stm32f4xx_hal_tim_ex.o"

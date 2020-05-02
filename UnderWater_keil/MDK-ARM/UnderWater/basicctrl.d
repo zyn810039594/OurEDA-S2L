@@ -28,8 +28,6 @@ underwater\basicctrl.o: ../Drivers/STM32F4xx_HAL_Driver/Inc/stm32f4xx_hal_adc_ex
 underwater\basicctrl.o: ../Drivers/STM32F4xx_HAL_Driver/Inc/stm32f4xx_hal_flash.h
 underwater\basicctrl.o: ../Drivers/STM32F4xx_HAL_Driver/Inc/stm32f4xx_hal_flash_ex.h
 underwater\basicctrl.o: ../Drivers/STM32F4xx_HAL_Driver/Inc/stm32f4xx_hal_flash_ramfunc.h
-underwater\basicctrl.o: ../Drivers/STM32F4xx_HAL_Driver/Inc/stm32f4xx_hal_i2c.h
-underwater\basicctrl.o: ../Drivers/STM32F4xx_HAL_Driver/Inc/stm32f4xx_hal_i2c_ex.h
 underwater\basicctrl.o: ../Drivers/STM32F4xx_HAL_Driver/Inc/stm32f4xx_hal_iwdg.h
 underwater\basicctrl.o: ../Drivers/STM32F4xx_HAL_Driver/Inc/stm32f4xx_hal_pwr.h
 underwater\basicctrl.o: ../Drivers/STM32F4xx_HAL_Driver/Inc/stm32f4xx_hal_pwr_ex.h
@@ -55,3 +53,4 @@ underwater\basicctrl.o: ../Inc/Attitude.h
 underwater\basicctrl.o: ../Inc/Setting.h
 underwater\basicctrl.o: ../Inc/Auto.h
 underwater\basicctrl.o: ../Inc/Display.h
+underwater\basicctrl.o: F:\keil\ARM\ARMCC\Bin\..\include\stdlib.h
