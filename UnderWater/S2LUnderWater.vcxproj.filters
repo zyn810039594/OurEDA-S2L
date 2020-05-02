@@ -61,9 +61,6 @@
     <Filter Include="Source files\STM32Cube HAL\DMA">
       <UniqueIdentifier>{57198671-162d-4671-b464-d114869cd698}</UniqueIdentifier>
     </Filter>
-    <Filter Include="Source files\STM32Cube HAL\I2C">
-      <UniqueIdentifier>{20e020bf-8cb0-4109-83ac-04dcf553e73c}</UniqueIdentifier>
-    </Filter>
     <Filter Include="Source files\Device-specific files">
       <UniqueIdentifier>{c0184eb2-2e6b-4e4b-8f90-d649d519ef6f}</UniqueIdentifier>
     </Filter>
@@ -114,9 +111,6 @@
     </Filter>
     <Filter Include="Header files\STM32Cube HAL\DMA">
       <UniqueIdentifier>{48d8dde9-32c8-4af6-be95-2d6c4a435055}</UniqueIdentifier>
-    </Filter>
-    <Filter Include="Header files\STM32Cube HAL\I2C">
-      <UniqueIdentifier>{345b98b2-fcea-4609-87f7-d1c74b611f5d}</UniqueIdentifier>
     </Filter>
     <Filter Include="Header files\Device-specific files">
       <UniqueIdentifier>{b3ab0f10-5678-410e-851c-957aa2b127f2}</UniqueIdentifier>
@@ -236,12 +230,6 @@
     </ClCompile>
     <ClCompile Include="Drivers\STM32F4xx_HAL_Driver\Src\stm32f4xx_hal_dma.c">
       <Filter>Source files\STM32Cube HAL\DMA</Filter>
-    </ClCompile>
-    <ClCompile Include="Drivers\STM32F4xx_HAL_Driver\Src\stm32f4xx_hal_i2c.c">
-      <Filter>Source files\STM32Cube HAL\I2C</Filter>
-    </ClCompile>
-    <ClCompile Include="Drivers\STM32F4xx_HAL_Driver\Src\stm32f4xx_hal_i2c_ex.c">
-      <Filter>Source files\STM32Cube HAL\I2C</Filter>
     </ClCompile>
     <None Include="stm32.props">
       <Filter>Source files\Device-specific files</Filter>
@@ -386,12 +374,6 @@
     </ClInclude>
     <ClInclude Include="Drivers\STM32F4xx_HAL_Driver\Inc\stm32f4xx_hal_dma.h">
       <Filter>Header files\STM32Cube HAL\DMA</Filter>
-    </ClInclude>
-    <ClInclude Include="Drivers\STM32F4xx_HAL_Driver\Inc\stm32f4xx_hal_i2c.h">
-      <Filter>Header files\STM32Cube HAL\I2C</Filter>
-    </ClInclude>
-    <ClInclude Include="Drivers\STM32F4xx_HAL_Driver\Inc\stm32f4xx_hal_i2c_ex.h">
-      <Filter>Header files\STM32Cube HAL\I2C</Filter>
     </ClInclude>
     <None Include="S2LUnderwater-Debug.vgdbsettings">
       <Filter>VisualGDB settings</Filter>

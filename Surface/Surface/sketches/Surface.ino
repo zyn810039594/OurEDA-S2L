@@ -6,7 +6,7 @@
 #define Portrait A0
 #define Rotate A1
 #define Vertical A2
-#define AUndefined1 A3
+#define ROver A3
 #define Light A4
 #define PTZ A5
 #define Clip A6
@@ -32,8 +32,8 @@
 //串口波特率
 #define SerialBaud 115200
 
-//发送频率 单位Hz
-#define SendFreq 25
+//抓手刷新频率 单位Hz
+#define SendFreq 10
 
 //自动模式数据调节
 //翻转初始角度
@@ -54,14 +54,17 @@
 //PWM输出范围 若想反向直接把高低换个个儿
 //前进后退与侧推
 //前进后退
-#define PortraitHigh 2500
-#define PortraitLow 500
+#define PortraitHigh 1925
+#define PortraitLow 1075
 //旋转
-#define RotateHigh 2500
-#define RotateLow 500
+#define RotateHigh 1925
+#define RotateLow 1075
 //上下
-#define VerticalHigh 2500
-#define VerticalLow 500
+#define VerticalHigh 1925
+#define VerticalLow 1075
+//横滚
+#define ROverHigh 1925
+#define ROverLow 1075
 //舵机范围
 //夹取舵机
 #define ClipHigh 2500
@@ -73,8 +76,8 @@
 #define PTZHigh 2500
 #define PTZLow 500
 //灯光
-#define LightHigh 2500
-#define LightLow 500
+#define LightHigh 4999
+#define LightLow 0
 
 //以下为代码部分
 
@@ -85,7 +88,7 @@ u8* SendString = 0;
 u16* PPortrait = 0;
 u16* PRotate = 0;
 u16* PVertical = 0;
-u16* PAUndefined1 = 0;
+u16* PROver = 0;
 u16* PLight = 0;
 u16* PPTZ = 0;
 u16* PClip = 0;
@@ -123,25 +126,17 @@ u8 FAutoClip = 0;
 u16 FClipTime = 0;
 u16 FFlipTime = 0;
 
+//回传判定标志位
+u8 CheckRec = 0;
+//回传缓存位
+u8 RecBuf = 0;
 
 //定时器中断
 void TimerInterrupt()
 {
-	//简单处理
-	CFMode = CFStart*(FHandClip + FSemiautoClip * 2 + FAutoClip * 3);
-	*PLight = (u16)map(((*PLight)*FLight), 0, 1024, LightLow, LightHigh);
-	*PGesture = (u8)(FGesture*(FPitch + 2*FRoll + 3*FPRMixed));
-	*PPortrait = (u16)map(*PPortrait, 0, 1024, PortraitLow, PortraitHigh);
-	*PRotate = (u16)map(*PRotate, 0, 1024, RotateLow, RotateHigh);
-	*PVertical = (u16)map(*PVertical, 0, 1024, VerticalLow, VerticalHigh);
-	*PPTZ = (u16)map(*PPTZ, 0, 1024, PTZLow, PTZHigh);
 	//自动夹取代码
 	switch(CFMode)
 	{
-	case 1:
-		*PClip = (u16)map(*PClip, 0, 1024, ClipLow, ClipHigh);
-		*PFlip = (u16)map(*PFlip, 0, 1024, FlipLow, FlipHigh);
-		break;
 	case 2:
 		*PClip = (u16)map(*PClip, 0, 1024, ClipLow, ClipHigh);
 		switch (CFStart)
@@ -199,13 +194,15 @@ void TimerInterrupt()
 			break;
 		}
 		break;
+	default:
+		CFStart = 0;
+		break;
 	}
-	Serial.write(SendString, 21);
+	
 }
-
-void setup() 
+//IO初始化与指针的定向处理
+void IOInit()
 {
-	// put your setup code here, to run once:
 	//打开输入GPIO
 	pinMode(Transverse, INPUT);
 	pinMode(Gesture, INPUT);
@@ -225,39 +222,33 @@ void setup()
 	pinMode(AutoClip, INPUT);
 	Serial.begin(SerialBaud);
 	//开辟字符串用内存空间
-	SendString = (u8*)malloc(21);
+	SendString = (u8*)malloc(23);
 	//指针定向
 	PPortrait = (u16*)(SendString + 1);
 	PRotate = (u16*)(SendString + 3);
 	PVertical = (u16*)(SendString + 5);
-	//PAUndefined1=0;
-	PLight = (u16*)(SendString + 7);
-	PPTZ = (u16*)(SendString + 9);
-	PClip = (u16*)(SendString + 11);
-	PFlip = (u16*)(SendString + 13);
-	PTransverse = SendString + 15;
-	POrient = SendString + 16;
-	PDeepkeeping = SendString + 17;
-	PMode = SendString + 18;
-	PGesture = SendString + 19;
-	delay(4000);
-	//开启定时器中断，开始运行
-	FlexiTimer2::set(Latency, TimerInterrupt);
-	FlexiTimer2::start();
+	PROver = (u16*)(SendString + 7); 
+	PLight = (u16*)(SendString + 9);
+	PPTZ = (u16*)(SendString + 11);
+	PClip = (u16*)(SendString + 13);
+	PFlip = (u16*)(SendString + 15);
+	PTransverse = SendString + 17;
+	POrient = SendString + 18;
+	PDeepkeeping = SendString + 19;
+	PMode = SendString + 20;
+	PGesture = SendString + 21;
 }
-
-void loop() 
+//读取函数
+void InfTake()
 {
-	// put your main code here, to run repeatedly:
 	//模拟口读取
 	*PPortrait = (u16)analogRead(Portrait);
 	*PRotate = (u16)analogRead(Rotate);
 	*PVertical = (u16)analogRead(Vertical);
-	//*PAUndefined1=(u16)analogRead(AUndefined1);
+	*PROver = (u16)analogRead(ROver);
 	*PLight = (u16)analogRead(Light);
 	*PPTZ = (u16)analogRead(PTZ);
-	*PClip = (u16)analogRead(Clip);
-	*PFlip = (u16)analogRead(Flip);
+	
 	//数字口读取
 	*PTransverse = (u8)digitalRead(Transverse);
 	*POrient = (u8)digitalRead(Orient);
@@ -273,8 +264,76 @@ void loop()
 	FHandClip = digitalRead(HandClip);
 	FSemiautoClip = digitalRead(SemiautoClip);
 	FAutoClip = digitalRead(AutoClip);
-	if (CFStart == 0)
+	CFMode = FHandClip + FSemiautoClip * 2 + FAutoClip * 3;
+	
+	//简单处理
+	*PLight = (u16)map(((*PLight)*FLight), 0, 1024, LightLow, LightHigh);
+	*PGesture = (u8)(FGesture*(FPitch + 2*FRoll + 3*FPRMixed));
+	*PPortrait = (u16)map(*PPortrait, 0, 1024, PortraitLow, PortraitHigh);
+	*PRotate = (u16)map(*PRotate, 0, 1024, RotateLow, RotateHigh);
+	*PVertical = (u16)map(*PVertical, 0, 1024, VerticalLow, VerticalHigh);
+	*PROver = (u16)map(*PROver, 0, 1024, ROverHigh, ROverLow);
+	*PPTZ = (u16)map(*PPTZ, 0, 1024, PTZLow, PTZHigh);
+	switch (CFMode)
 	{
-		CFStart = digitalRead(AutoclipSwitcher);
+	case 1:
+		*PClip = (u16)analogRead(Clip);
+		*PFlip = (u16)analogRead(Flip);
+		*PClip = (u16)map(*PClip, 0, 1024, ClipLow, ClipHigh);
+		*PFlip = (u16)map(*PFlip, 0, 1024, FlipLow, FlipHigh);
+		break;
+	case 2:
+		*PClip = (u16)analogRead(Clip);
+		*PClip = (u16)map(*PClip, 0, 1024, ClipLow, ClipHigh);
+		if (!CFStart)
+		{
+			CFStart = digitalRead(AutoclipSwitcher);
+			*PFlip = (u16)analogRead(Flip);
+			*PFlip = (u16)map(*PFlip, 0, 1024, FlipLow, FlipHigh);
+		}
+		break;
+	case 3:
+		if (!CFStart)
+		{
+			*PClip = (u16)analogRead(Clip);
+			*PFlip = (u16)analogRead(Flip);
+			CFStart = digitalRead(AutoclipSwitcher);
+			*PClip = (u16)map(*PClip, 0, 1024, ClipLow, ClipHigh);
+			*PFlip = (u16)map(*PFlip, 0, 1024, FlipLow, FlipHigh);
+		}
+		break;
 	}
+}
+
+void setup() 
+{
+	// put your setup code here, to run once:
+	IOInit();
+	delay(4000);
+	//定时器中断设置
+	FlexiTimer2::set(Latency, TimerInterrupt);
+	FlexiTimer2::start();
+}
+
+void loop() 
+{
+	// put your main code here, to run repeatedly:
+	if(Serial.available() > 0)
+	{
+		RecBuf = Serial.read();
+		if (RecBuf == 0xFF)
+		{
+			++CheckRec;
+			if (CheckRec == 2)
+			{
+				CheckRec = 0;
+				Serial.write(SendString, 23);
+			}
+		}
+	}
+	else
+	{
+		InfTake();
+	}
+	
 }

@@ -50,7 +50,7 @@ typedef TaskHandle_t osThreadId;
 
 /* Private variables ---------------------------------------------------------*/
 /* USER CODE BEGIN PV */
-
+static u8 RestFlag = 0;
 /* USER CODE END PV */
 
 /* Private function prototypes -----------------------------------------------*/
@@ -65,6 +65,8 @@ typedef TaskHandle_t osThreadId;
 
 /* External variables --------------------------------------------------------*/
 extern DMA_HandleTypeDef hdma_adc1;
+extern TIM_HandleTypeDef htim1;
+extern TIM_HandleTypeDef htim7;
 extern DMA_HandleTypeDef hdma_uart4_rx;
 extern DMA_HandleTypeDef hdma_uart4_tx;
 extern DMA_HandleTypeDef hdma_uart5_rx;
@@ -83,21 +85,24 @@ extern UART_HandleTypeDef huart1;
 extern UART_HandleTypeDef huart2;
 extern UART_HandleTypeDef huart3;
 extern UART_HandleTypeDef huart6;
-extern TIM_HandleTypeDef htim6;
+extern TIM_HandleTypeDef htim10;
 
 /* USER CODE BEGIN EV */
-extern osThreadId ControlTaskHandle;
-extern osThreadId DisplayTaskHandle;
-extern osThreadId WaterDeepTaskHandle;
-extern osThreadId AttitudeTaskHandle;
-extern osThreadId EmptyTaskHandle;
-extern osThreadId AutoMoveTaskHandle;
+extern volatile u8 TaskBeingChangeFlag;
+extern volatile u8 ControlTaskFlag;
+extern volatile u8 DisplayTaskFlag;
+extern volatile u8 WaterDeepTaskFlag;
+extern volatile u8 AttitudeTaskFlag;
+extern volatile u8 AutoMoveTaskFlag;
 
 extern u8 UART1RXCache[30];
+extern u8 UART3RXCache[30];
 extern u8 UART4RXCache[40];
 extern u8* UART4RXPosition;
 extern volatile u8 UART1EndFlag;
+extern volatile u8 UART3EndFlag;
 extern volatile u8 UART4EndFlag;
+extern volatile u8 SystemBegin;
 /* USER CODE END EV */
 
 /******************************************************************************/
@@ -280,6 +285,21 @@ void DMA1_Stream6_IRQHandler(void)
 }
 
 /**
+  * @brief This function handles TIM1 update interrupt and TIM10 global interrupt.
+  */
+void TIM1_UP_TIM10_IRQHandler(void)
+{
+  /* USER CODE BEGIN TIM1_UP_TIM10_IRQn 0 */
+
+  /* USER CODE END TIM1_UP_TIM10_IRQn 0 */
+  HAL_TIM_IRQHandler(&htim1);
+  HAL_TIM_IRQHandler(&htim10);
+  /* USER CODE BEGIN TIM1_UP_TIM10_IRQn 1 */
+
+  /* USER CODE END TIM1_UP_TIM10_IRQn 1 */
+}
+
+/**
   * @brief This function handles USART1 global interrupt.
   */
 void USART1_IRQHandler(void)
@@ -296,13 +316,23 @@ void USART1_IRQHandler(void)
 		HAL_UART_DMAStop(&huart1); 
 		temp  = __HAL_DMA_GET_COUNTER(&hdma_usart1_rx); 
 		u8 U1_Rec_Len =  UART1RXLen - temp; 
-		if (U1_Rec_Len == 21)
+		if (U1_Rec_Len == 23)
 		{
-			if ((UART1RXCache[20] ==0x21)&&(UART1RXCache[0] ==0x25))
+			if ((UART1RXCache[22] ==0x21)&&(UART1RXCache[0] ==0x25))
 			{
-				UART1EndFlag = 1; 
-				__HAL_UART_DISABLE_IT(&huart1, UART_IT_IDLE);
-				xTaskResumeFromISR(ControlTaskHandle);
+				if (SystemBegin)
+				{
+					UART1EndFlag = 1; 
+					__HAL_UART_DISABLE_IT(&huart1, UART_IT_IDLE);
+					RestFlag = 0;;
+					++TaskBeingChangeFlag;
+					++ControlTaskFlag;
+				}
+				else
+				{
+					SystemBegin = 1;
+					HAL_UART_Receive_DMA(&huart1, UART1RXCache, UART1RXLen);
+				}
 			}
 			else
 			{
@@ -341,7 +371,38 @@ void USART2_IRQHandler(void)
 void USART3_IRQHandler(void)
 {
   /* USER CODE BEGIN USART3_IRQn 0 */
-
+	uint32_t tmp_flag = 0;
+	uint32_t temp;
+	tmp_flag = __HAL_UART_GET_FLAG(&huart3, UART_FLAG_IDLE);
+	if ((tmp_flag != RESET))
+	{ 
+		__HAL_UART_CLEAR_IDLEFLAG(&huart3); 
+		temp = huart3.Instance->SR; 
+		temp = huart1.Instance->DR; 
+		HAL_UART_DMAStop(&huart3); 
+		temp  = __HAL_DMA_GET_COUNTER(&hdma_usart3_rx); 
+		u8 U3_Rec_Len =  UART1RXLen - temp; 
+		if (U3_Rec_Len >= 23)
+		{
+			if ((UART3RXCache[20] == 0x21)&&(UART3RXCache[0] == 0x25))
+			{
+			
+				UART3EndFlag = 1; 
+				__HAL_UART_DISABLE_IT(&huart3, UART_IT_IDLE);
+				++TaskBeingChangeFlag;
+				++AttitudeTaskFlag;
+				
+			}
+			else
+			{
+				HAL_UART_Receive_DMA(&huart3, UART1RXCache, UART1RXLen);
+			}
+		}
+		else
+		{
+			HAL_UART_Receive_DMA(&huart3, UART1RXCache, UART1RXLen);
+		}
+	}
   /* USER CODE END USART3_IRQn 0 */
   HAL_UART_IRQHandler(&huart3);
   /* USER CODE BEGIN USART3_IRQn 1 */
@@ -393,7 +454,8 @@ void UART4_IRQHandler(void)
 							UART4RXPosition = &UART4RXCache[i];
 							UART4EndFlag = 1; 
 							__HAL_UART_DISABLE_IT(&huart4, UART_IT_IDLE);
-							xTaskResumeFromISR(WaterDeepTaskHandle);
+							++TaskBeingChangeFlag;
+							++WaterDeepTaskFlag;
 							break;
 						}
 					}
@@ -429,6 +491,59 @@ void UART5_IRQHandler(void)
   /* USER CODE BEGIN UART5_IRQn 1 */
 
   /* USER CODE END UART5_IRQn 1 */
+}
+
+/**
+  * @brief This function handles TIM7 global interrupt.
+  */
+void TIM7_IRQHandler(void)
+{
+  /* USER CODE BEGIN TIM7_IRQn 0 */
+	static u8 RestTimer = 0;
+	static u8 LightClipTimer = 0;
+	if (RestFlag)
+	{
+		if (RestTimer == 120)
+		{
+			switch (LightClipTimer)
+			{
+			case 3:case 8:case 13:
+				TIM14->CCR1 = LightLowMove;
+				++LightClipTimer;
+				break;
+			case 4:case 9:case 14:
+				TIM14->CCR1 = LightHighMove;
+				++LightClipTimer;
+				break;
+			case 5:case 11:
+				TIM3->CCR3 = PTZLowMove;
+				++LightClipTimer;
+				break;
+			case 6:case 12:
+				TIM3->CCR3 = PTZHighMove;
+				++LightClipTimer;
+				break;
+			case 15:
+				LightClipTimer = 0;
+				break;
+			}
+		}
+		else
+		{
+			++RestTimer;
+		}
+	}
+	else
+	{
+		RestFlag = 1;
+		RestTimer = 0;
+	}
+	
+  /* USER CODE END TIM7_IRQn 0 */
+  HAL_TIM_IRQHandler(&htim7);
+  /* USER CODE BEGIN TIM7_IRQn 1 */
+
+  /* USER CODE END TIM7_IRQn 1 */
 }
 
 /**

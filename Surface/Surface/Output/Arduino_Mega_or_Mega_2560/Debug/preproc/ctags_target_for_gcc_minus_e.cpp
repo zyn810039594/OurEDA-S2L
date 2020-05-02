@@ -10,7 +10,7 @@
 //串口波特率
 
 
-//发送频率 单位Hz
+//抓手刷新频率 单位Hz
 
 
 //自动模式数据调节
@@ -40,6 +40,9 @@
 //上下
 
 
+//横滚
+
+
 //舵机范围
 //夹取舵机
 
@@ -63,7 +66,7 @@ unsigned char* SendString = 0;
 unsigned short* PPortrait = 0;
 unsigned short* PRotate = 0;
 unsigned short* PVertical = 0;
-unsigned short* PAUndefined1 = 0;
+unsigned short* PROver = 0;
 unsigned short* PLight = 0;
 unsigned short* PPTZ = 0;
 unsigned short* PClip = 0;
@@ -76,7 +79,7 @@ unsigned char* PMode = 0;
 unsigned char* PGesture = 0;
 
 //延时计算
-const unsigned short Latency = 1000 / 25;
+const unsigned short Latency = 1000 / 10;
 const unsigned short DoClipTime = 1000 / Latency;
 const unsigned short DoFlipTime = 1000 / Latency;
 const unsigned short DoDisClipTime = 1000 / Latency;
@@ -101,25 +104,17 @@ unsigned char FAutoClip = 0;
 unsigned short FClipTime = 0;
 unsigned short FFlipTime = 0;
 
+//回传判定标志位
+unsigned char CheckRec = 0;
+//回传缓存位
+unsigned char RecBuf = 0;
 
 //定时器中断
 void TimerInterrupt()
 {
- //简单处理
- CFMode = CFStart*(FHandClip + FSemiautoClip * 2 + FAutoClip * 3);
- *PLight = (unsigned short)map(((*PLight)*FLight), 0, 1024, 500, 2500);
- *PGesture = (unsigned char)(FGesture*(FPitch + 2*FRoll + 3*FPRMixed));
- *PPortrait = (unsigned short)map(*PPortrait, 0, 1024, 500, 2500);
- *PRotate = (unsigned short)map(*PRotate, 0, 1024, 500, 2500);
- *PVertical = (unsigned short)map(*PVertical, 0, 1024, 500, 2500);
- *PPTZ = (unsigned short)map(*PPTZ, 0, 1024, 500, 2500);
  //自动夹取代码
  switch(CFMode)
  {
- case 1:
-  *PClip = (unsigned short)map(*PClip, 0, 1024, 500, 2500);
-  *PFlip = (unsigned short)map(*PFlip, 0, 1024, 500, 2500);
-  break;
  case 2:
   *PClip = (unsigned short)map(*PClip, 0, 1024, 500, 2500);
   switch (CFStart)
@@ -177,13 +172,15 @@ void TimerInterrupt()
    break;
   }
   break;
+ default:
+  CFStart = 0;
+  break;
  }
- Serial.write(SendString, 21);
-}
 
-void setup()
+}
+//IO初始化与指针的定向处理
+void IOInit()
 {
- // put your setup code here, to run once:
  //打开输入GPIO
  pinMode(30, 0x0);
  pinMode(31, 0x0);
@@ -203,39 +200,33 @@ void setup()
  pinMode(45, 0x0);
  Serial.begin(115200);
  //开辟字符串用内存空间
- SendString = (unsigned char*)malloc(21);
+ SendString = (unsigned char*)malloc(23);
  //指针定向
  PPortrait = (unsigned short*)(SendString + 1);
  PRotate = (unsigned short*)(SendString + 3);
  PVertical = (unsigned short*)(SendString + 5);
- //PAUndefined1=0;
- PLight = (unsigned short*)(SendString + 7);
- PPTZ = (unsigned short*)(SendString + 9);
- PClip = (unsigned short*)(SendString + 11);
- PFlip = (unsigned short*)(SendString + 13);
- PTransverse = SendString + 15;
- POrient = SendString + 16;
- PDeepkeeping = SendString + 17;
- PMode = SendString + 18;
- PGesture = SendString + 19;
- delay(4000);
- //开启定时器中断，开始运行
- FlexiTimer2::set(Latency, TimerInterrupt);
- FlexiTimer2::start();
+ PROver = (unsigned short*)(SendString + 7);
+ PLight = (unsigned short*)(SendString + 9);
+ PPTZ = (unsigned short*)(SendString + 11);
+ PClip = (unsigned short*)(SendString + 13);
+ PFlip = (unsigned short*)(SendString + 15);
+ PTransverse = SendString + 17;
+ POrient = SendString + 18;
+ PDeepkeeping = SendString + 19;
+ PMode = SendString + 20;
+ PGesture = SendString + 21;
 }
-
-void loop()
+//读取函数
+void InfTake()
 {
- // put your main code here, to run repeatedly:
  //模拟口读取
  *PPortrait = (unsigned short)analogRead(A0);
  *PRotate = (unsigned short)analogRead(A1);
  *PVertical = (unsigned short)analogRead(A2);
- //*PAUndefined1=(u16)analogRead(AUndefined1);
+ *PROver = (unsigned short)analogRead(A3);
  *PLight = (unsigned short)analogRead(A4);
  *PPTZ = (unsigned short)analogRead(A5);
- *PClip = (unsigned short)analogRead(A6);
- *PFlip = (unsigned short)analogRead(A7);
+
  //数字口读取
  *PTransverse = (unsigned char)digitalRead(30);
  *POrient = (unsigned char)digitalRead(32);
@@ -251,8 +242,76 @@ void loop()
  FHandClip = digitalRead(43);
  FSemiautoClip = digitalRead(44);
  FAutoClip = digitalRead(45);
- if (CFStart == 0)
+ CFMode = FHandClip + FSemiautoClip * 2 + FAutoClip * 3;
+
+ //简单处理
+ *PLight = (unsigned short)map(((*PLight)*FLight), 0, 1024, 0, 4999);
+ *PGesture = (unsigned char)(FGesture*(FPitch + 2*FRoll + 3*FPRMixed));
+ *PPortrait = (unsigned short)map(*PPortrait, 0, 1024, 1075, 1925);
+ *PRotate = (unsigned short)map(*PRotate, 0, 1024, 1075, 1925);
+ *PVertical = (unsigned short)map(*PVertical, 0, 1024, 1075, 1925);
+ *PROver = (unsigned short)map(*PROver, 0, 1024, 1925, 1075);
+ *PPTZ = (unsigned short)map(*PPTZ, 0, 1024, 500, 2500);
+ switch (CFMode)
  {
-  CFStart = digitalRead(34);
+ case 1:
+  *PClip = (unsigned short)analogRead(A6);
+  *PFlip = (unsigned short)analogRead(A7);
+  *PClip = (unsigned short)map(*PClip, 0, 1024, 500, 2500);
+  *PFlip = (unsigned short)map(*PFlip, 0, 1024, 500, 2500);
+  break;
+ case 2:
+  *PClip = (unsigned short)analogRead(A6);
+  *PClip = (unsigned short)map(*PClip, 0, 1024, 500, 2500);
+  if (!CFStart)
+  {
+   CFStart = digitalRead(34);
+   *PFlip = (unsigned short)analogRead(A7);
+   *PFlip = (unsigned short)map(*PFlip, 0, 1024, 500, 2500);
+  }
+  break;
+ case 3:
+  if (!CFStart)
+  {
+   *PClip = (unsigned short)analogRead(A6);
+   *PFlip = (unsigned short)analogRead(A7);
+   CFStart = digitalRead(34);
+   *PClip = (unsigned short)map(*PClip, 0, 1024, 500, 2500);
+   *PFlip = (unsigned short)map(*PFlip, 0, 1024, 500, 2500);
+  }
+  break;
  }
+}
+
+void setup()
+{
+ // put your setup code here, to run once:
+ IOInit();
+ delay(4000);
+ //定时器中断设置
+ FlexiTimer2::set(Latency, TimerInterrupt);
+ FlexiTimer2::start();
+}
+
+void loop()
+{
+ // put your main code here, to run repeatedly:
+ if(Serial.available() > 0)
+ {
+  RecBuf = Serial.read();
+  if (RecBuf == 0xFF)
+  {
+   ++CheckRec;
+   if (CheckRec == 2)
+   {
+    CheckRec = 0;
+    Serial.write(SendString, 23);
+   }
+  }
+ }
+ else
+ {
+  InfTake();
+ }
+
 }

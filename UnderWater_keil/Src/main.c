@@ -946,7 +946,8 @@ void CtrlTask(void const * argument)
   for(;;)
   {
 	  HAL_IWDG_Refresh(&hiwdg);
-	  
+	  BasicControl();
+	  vTaskSuspend(ControlTaskHandle);
     osDelay(1);
   }
   /* USER CODE END 5 */ 
@@ -1033,6 +1034,7 @@ void EmpTask(void const * argument)
 		  vTaskSuspend(WaterDeepTaskHandle);
 		  vTaskSuspend(AttitudeTaskHandle);
 		  vTaskSuspend(DisplayTaskHandle);
+		  vTaskSuspend(AutoMoveTaskHandle);
 		  HAL_TIM_PWM_Start(&htim1, TIM_CHANNEL_1);
 		  HAL_TIM_PWM_Start(&htim1, TIM_CHANNEL_2);
 		  HAL_TIM_PWM_Start(&htim1, TIM_CHANNEL_3);
@@ -1085,6 +1087,7 @@ void EmpTask(void const * argument)
 void AutoTask(void const * argument)
 {
   /* USER CODE BEGIN AutoTask */
+	osDelay(200);
   /* Infinite loop */
   for(;;)
   {

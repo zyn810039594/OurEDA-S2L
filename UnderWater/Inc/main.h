@@ -62,7 +62,9 @@ void Error_Handler(void);
 /* Private defines -----------------------------------------------------------*/
 /* USER CODE BEGIN Private defines */
 
-
+#define UART1RXLen 30
+#define	UART3RXLen 30
+#define UART4RXLen 40
 
 /* USER CODE END Private defines */
 

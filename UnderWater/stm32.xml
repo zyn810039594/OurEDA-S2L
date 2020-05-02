@@ -48,7 +48,7 @@
     <AllDependencies>
       <ProjectDependency>
         <RelativePath>UnderWater.gpdsc</RelativePath>
-        <Timestamp>132316185002310518</Timestamp>
+        <Timestamp>132328751541106621</Timestamp>
       </ProjectDependency>
     </AllDependencies>
     <RootDirectory>
@@ -350,23 +350,6 @@
                 </VirtualFileSnapshot>
                 <VirtualFileSnapshot>
                   <RelativePath>Drivers\STM32F4xx_HAL_Driver\Src\stm32f4xx_hal_dma.c</RelativePath>
-                </VirtualFileSnapshot>
-              </Files>
-            </VirtualDirectorySnapshot>
-            <VirtualDirectorySnapshot>
-              <Name>I2C</Name>
-              <Files>
-                <VirtualFileSnapshot>
-                  <RelativePath>Drivers\STM32F4xx_HAL_Driver\Inc\stm32f4xx_hal_i2c.h</RelativePath>
-                </VirtualFileSnapshot>
-                <VirtualFileSnapshot>
-                  <RelativePath>Drivers\STM32F4xx_HAL_Driver\Src\stm32f4xx_hal_i2c.c</RelativePath>
-                </VirtualFileSnapshot>
-                <VirtualFileSnapshot>
-                  <RelativePath>Drivers\STM32F4xx_HAL_Driver\Inc\stm32f4xx_hal_i2c_ex.h</RelativePath>
-                </VirtualFileSnapshot>
-                <VirtualFileSnapshot>
-                  <RelativePath>Drivers\STM32F4xx_HAL_Driver\Src\stm32f4xx_hal_i2c_ex.c</RelativePath>
                 </VirtualFileSnapshot>
               </Files>
             </VirtualDirectorySnapshot>

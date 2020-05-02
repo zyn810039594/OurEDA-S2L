@@ -4,6 +4,8 @@
 
 #define SYSPROGS_ARDUINO_EXPAND_GENERATED_PROTOTYPES \
 	void TimerInterrupt(); \
+	void IOInit(); \
+	void InfTake(); \
 	void setup(); \
 	void loop(); \
 
