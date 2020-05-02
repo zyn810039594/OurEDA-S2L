@@ -1,6 +1,7 @@
 # OurEDA-S2L
-For now,it's a unfinished project.It will be use on the new robot of OurEDA, which is the simplified version of planned S2 version.
-That's why it's called S2L.
-Be lazyyyyyyyy now,so the update speed is pretty slow.
+It will be use on the new robot of OurEDA, which is the simplified version of planned S2.That's why it's called S2L.
+For now,it has the basic function--just to move.Some others has been added but no one could test it,so I disabled them.
+It may be completed next month,when I can test the machine myself.
+
 
 By Harold Zhao
