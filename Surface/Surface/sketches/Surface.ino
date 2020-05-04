@@ -1,7 +1,7 @@
 #include <FlexiTimer2.h>
 //方便使用的定义
-#define u8 unsigned char
-#define u16 unsigned short
+typedef unsigned char u8;
+typedef unsigned short u16;
 //模拟口数据采集定义
 #define Portrait A0
 #define Rotate A1
@@ -33,7 +33,7 @@
 #define SerialBaud 115200
 
 //抓手刷新频率 单位Hz
-#define SendFreq 10
+#define SendFreq 5
 
 //自动模式数据调节
 //翻转初始角度
@@ -57,11 +57,11 @@
 #define PortraitHigh 1925
 #define PortraitLow 1075
 //旋转
-#define RotateHigh 1925
-#define RotateLow 1075
+#define RotateHigh 1075
+#define RotateLow 1925
 //上下
-#define VerticalHigh 1925
-#define VerticalLow 1075
+#define VerticalHigh 1075
+#define VerticalLow 1925
 //横滚
 #define ROverHigh 1925
 #define ROverLow 1075
@@ -131,9 +131,17 @@ u8 CheckRec = 0;
 //回传缓存位
 u8 RecBuf = 0;
 
+//回传延时标志位
+u8 LateBuf = 0;
+
 //定时器中断
 void TimerInterrupt()
 {
+	if (LateBuf==3)
+	{
+		Serial.write(SendString, 23);
+		LateBuf = 0;
+	}
 	//自动夹取代码
 	switch(CFMode)
 	{
@@ -198,7 +206,7 @@ void TimerInterrupt()
 		CFStart = 0;
 		break;
 	}
-	
+	++LateBuf;
 }
 //IO初始化与指针的定向处理
 void IOInit()
@@ -224,6 +232,8 @@ void IOInit()
 	//开辟字符串用内存空间
 	SendString = (u8*)malloc(23);
 	//指针定向
+	SendString[0] = 0x25;
+	SendString[22] = 0x21;
 	PPortrait = (u16*)(SendString + 1);
 	PRotate = (u16*)(SendString + 3);
 	PVertical = (u16*)(SendString + 5);
@@ -237,10 +247,28 @@ void IOInit()
 	PDeepkeeping = SendString + 19;
 	PMode = SendString + 20;
 	PGesture = SendString + 21;
+	//初始化代码发送
+	SendString[0] = 0x25;
+	SendString[22] = 0x21;
+	*PPortrait = (u16)1500;
+	*PRotate = (u16)1500;
+	*PVertical = (u16)1500;
+	*PROver = (u16)1500;
+	*PLight = (u16)0;
+	*PPTZ = (u16)1500;
+	*PClip = (u16)1500;
+	*PFlip = (u16)1500;
+	*PTransverse = 0;
+	*POrient = 0;
+	*PDeepkeeping = 0;
+	*PMode = 1;
+	*PGesture = 0;
+	Serial.write(SendString, 23);
 }
 //读取函数
 void InfTake()
 {
+	LateBuf = 0;
 	//模拟口读取
 	*PPortrait = (u16)analogRead(Portrait);
 	*PRotate = (u16)analogRead(Rotate);
@@ -309,7 +337,9 @@ void setup()
 {
 	// put your setup code here, to run once:
 	IOInit();
-	delay(4000);
+	delay(1000);
+	InfTake();
+	Serial.write(SendString, 23);
 	//定时器中断设置
 	FlexiTimer2::set(Latency, TimerInterrupt);
 	FlexiTimer2::start();
@@ -320,15 +350,13 @@ void loop()
 	// put your main code here, to run repeatedly:
 	if(Serial.available() > 0)
 	{
-		RecBuf = Serial.read();
-		if (RecBuf == 0xFF)
+		Serial.read();
+		++CheckRec;
+		if (CheckRec==37)
 		{
-			++CheckRec;
-			if (CheckRec == 2)
-			{
-				CheckRec = 0;
-				Serial.write(SendString, 23);
-			}
+			CheckRec = 0;
+			Serial.write(SendString, 23);
+			InfTake();
 		}
 	}
 	else

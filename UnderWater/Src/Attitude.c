@@ -1,21 +1,23 @@
 #include "main.h"
-#include "cmsis_os.h"
 #include "Attitude.h"
 #include "Setting.h"
 
 typedef unsigned char u8;
 typedef unsigned short u16;
 
-static volatile uint32_t *VerticalCCR[4] = { &(TIM2->CCR1), &(TIM2->CCR2), &(TIM2->CCR3), &(TIM2->CCR4) };
+
+static u16* PAccPos[3];
+static u16* PRotPos[3];
+static u16* PEulPos[3];
+static u16* PMagPos[3];
+static u16* PInsTemPos[4];
 
 
-extern u16* PRotate;
-extern u16* PROver;
 
 
 //姿态控制代码（只写了4推模式）
 //正常模式代码
-void NormalMode(u8 Trans)
+void NormalMode(u8 Trans, volatile uint32_t* MoveThruster[8], u16 VerticalNum, u16 ROverNum)
 {
 	switch (Trans)
 	{
@@ -23,10 +25,10 @@ void NormalMode(u8 Trans)
 		
 		break;
 	case 1:
-		*VerticalCCR[0] = *PRotate;
-		*VerticalCCR[1] = *PRotate;
-		*VerticalCCR[2] = *PRotate;
-		*VerticalCCR[3] = *PRotate;
+		*MoveThruster[4] = VerticalNum;
+		*MoveThruster[5] = VerticalNum;
+		*MoveThruster[6] = VerticalNum;
+		*MoveThruster[7] = VerticalNum;
 		break;
 	case 2:
 		
@@ -35,7 +37,7 @@ void NormalMode(u8 Trans)
 	return;
 }
 //俯仰模式代码
-void PitchMode(u8 Trans)
+void PitchMode(u8 Trans, volatile uint32_t* MoveThruster[8], u16 VerticalNum, u16 ROverNum)
 {
 	switch (Trans)
 	{
@@ -43,10 +45,10 @@ void PitchMode(u8 Trans)
 		
 		break;
 	case 1:
-		*VerticalCCR[0] = 2500-*PRotate;
-		*VerticalCCR[1] = *PRotate;
-		*VerticalCCR[2] = *PRotate;
-		*VerticalCCR[3] = 2500-*PRotate;
+		*MoveThruster[4] = 3000 - VerticalNum;
+		*MoveThruster[5] = VerticalNum;
+		*MoveThruster[6] = VerticalNum;
+		*MoveThruster[7] = 3000 - VerticalNum;
 		break;
 	case 2:
 		
@@ -55,7 +57,7 @@ void PitchMode(u8 Trans)
 	return;
 }
 //横滚模式代码
-void RowMode(u8 Trans)
+void RowMode(u8 Trans, volatile uint32_t* MoveThruster[8], u16 VerticalNum, u16 ROverNum)
 {
 	switch (Trans)
 	{
@@ -63,10 +65,10 @@ void RowMode(u8 Trans)
 		
 		break;
 	case 1:
-		*VerticalCCR[0] = 2500-*PROver;
-		*VerticalCCR[1] = 2500-*PROver;
-		*VerticalCCR[2] = *PROver;
-		*VerticalCCR[3] = *PROver;
+		*MoveThruster[4] = 3000 - ROverNum;
+		*MoveThruster[5] = 3000 - ROverNum;
+		*MoveThruster[6] = ROverNum;
+		*MoveThruster[7] = ROverNum;
 		break;
 	case 2:
 		
@@ -75,7 +77,7 @@ void RowMode(u8 Trans)
 	return;
 }
 //混合模式代码（未编辑）
-void MixMode(u8 Trans)
+void MixMode(u8 Trans, volatile uint32_t* MoveThruster[8], u16 VerticalNum, u16 ROverNum)
 {
 	switch (Trans)
 	{
@@ -83,10 +85,7 @@ void MixMode(u8 Trans)
 		
 		break;
 	case 1:
-		*VerticalCCR[0] = *PRotate;
-		*VerticalCCR[1] = *PRotate;
-		*VerticalCCR[2] = *PRotate;
-		*VerticalCCR[3] = *PRotate;
+
 		break;
 	case 2:
 		
@@ -198,10 +197,44 @@ void DeepAnalyze(u8* DataPosition,u16* PDepth,u16*PWaterTemperture,u8* PDN,u8* P
 		}
 	}
 }
-//姿态数据分析
-void AttitudeAnalyze(u16* PRollL,u16* AttitudeNum)
+//姿态指针定向
+void AttitudePoint(u8* SerialData)
 {
-	AttitudeNum[0] = PRollL[0] * 32768 * 1800;
-	AttitudeNum[1] = PRollL[1] * 32768 * 1800;
-	AttitudeNum[2] = PRollL[2] * 32768 * 1800;
+	PAccPos[0] = (u16*)(SerialData + 2);
+	PAccPos[1] = (u16*)(SerialData + 4);
+	PAccPos[2] = (u16*)(SerialData + 6);
+	PInsTemPos[0] = (u16*)(SerialData + 8);
+	PRotPos[0] = (u16*)(SerialData + 13);
+	PRotPos[1] = (u16*)(SerialData + 15);
+	PRotPos[2] = (u16*)(SerialData + 17);
+	PInsTemPos[1] = (u16*)(SerialData + 19);
+	PEulPos[0] = (u16*)(SerialData + 24);
+	PEulPos[1] = (u16*)(SerialData + 26);
+	PEulPos[2] = (u16*)(SerialData + 28);
+	PInsTemPos[2] = (u16*)(SerialData + 30);
+	PMagPos[0] = (u16*)(SerialData + 35);
+	PMagPos[1] = (u16*)(SerialData + 37);
+	PMagPos[2] = (u16*)(SerialData + 39);
+	PInsTemPos[2] = (u16*)(SerialData + 41);
+}
+//姿态数据取出
+void AttitudeTake(u16* AttitudeNum,u16* AccelerationNum,u16* RotSpeedNum,u16* EulerAngleNum,u16* MagnetismNum,u16* InsideTempertureNum)
+{
+	
+	AccelerationNum[0] = *PAccPos[0];
+	AccelerationNum[1] = *PAccPos[1];
+	AccelerationNum[2] = *PAccPos[2];
+	RotSpeedNum[0] = *PRotPos[0];
+	RotSpeedNum[1] = *PRotPos[1];
+	RotSpeedNum[2] = *PRotPos[2];
+	EulerAngleNum[0] = *PEulPos[0];
+	EulerAngleNum[1] = *PEulPos[1];
+	EulerAngleNum[2] = *PEulPos[2];
+	MagnetismNum[0] = *PMagPos[0];
+	MagnetismNum[1] = *PMagPos[1];
+	MagnetismNum[2] = *PMagPos[2];
+	*InsideTempertureNum = (*PInsTemPos[0] + *PInsTemPos[1] + *PInsTemPos[2] + *PInsTemPos[3]) / 4;
+	AttitudeNum[0] = (u16)(((float)EulerAngleNum[0] / 32768) * 1800);
+	AttitudeNum[1] = (u16)(((float)EulerAngleNum[1] / 32768) * 1800);
+	AttitudeNum[2] = (u16)(((float)EulerAngleNum[2] / 32768) * 1800);
 }

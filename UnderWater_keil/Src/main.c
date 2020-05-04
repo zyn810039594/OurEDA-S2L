@@ -69,49 +69,57 @@ osThreadId AutoMoveTaskHandle;
 osThreadId InitialTaskHandle;
 osThreadId SwitcherTaskHandle;
 /* USER CODE BEGIN PV */
-//进程激活需求标志位
+//鎬昏繘绋嬪惎鍔ㄨ姹傛爣蹇椾綅
 volatile u8 TaskBeingChangeFlag = 0;
-//需要激活的进程
+//涓绘帶杩涚▼鍚姩璇锋眰鏍囧織浣?
 volatile u8 ControlTaskFlag = 0;
+//鏄剧ず杩涚▼鍚姩璇锋眰鏍囧織浣?
 volatile u8 DisplayTaskFlag = 0;
+//姘存繁妫?娴嬭繘绋嬪惎鍔ㄨ姹傛爣蹇椾綅
 volatile u8 WaterDeepTaskFlag = 0;
+//涔濊酱璇诲彇杩涚▼鍚姩璇锋眰鏍囧織浣?
 volatile u8 AttitudeTaskFlag = 0;
+//鑷姩杩愬姩杩涚▼鍚姩璇锋眰鏍囧織浣?
 volatile u8 AutoMoveTaskFlag = 0;
 
-
+//鎺ㄨ繘鍣≒WM鍙ｅ畾涔?
+volatile uint32_t* MoveCCR[8] = { &(TIM1->CCR1), &(TIM1->CCR2), &(TIM1->CCR3), &(TIM1->CCR4), &(TIM2->CCR1), &(TIM2->CCR2), &(TIM2->CCR3), &(TIM2->CCR4) };
+//涓插彛1缂撳瓨
 u8 UART1RXCache[UART1RXLen];
+//涓插彛3缂撳瓨
 u8 UART3RXCache[UART3RXLen];
+//涓插彛4缂撳瓨
 u8 UART4RXCache[UART4RXLen];
+//涓插彛4璇诲彇鎸囬拡
 u8* UART4RXPosition = 0;
-volatile u8 UART1EndFlag = 0;
-volatile u8 UART3EndFlag = 0;
-volatile u8 UART4EndFlag = 0;
+//绯荤粺鍚姩鐘舵?佹爣蹇椾綅
 volatile u8 SystemBegin = 0;
-volatile u8 TransverseMode = 0;
-volatile u8 MoveMode = 1;
-volatile u8 GestureMode = 0;
-volatile u8 OrientMode = 0;
-volatile u8 DeepkeepingMode = 0;
 
+//妯℃嫙妫?娴嬬紦瀛?
 uint32_t ADCCache[6] = { 0 };
 
+//姘存繁鏁版嵁
 u16 WaterDepth = 0;
+//姘存俯鏁版嵁
 u16 WaterTemperture = 0;
+//姘存繁鎸変綅鏁版嵁
 u8 WaterDepthNum[6];
+//姘存俯鎸変綅鏁版嵁
 u8 WaterTempertureNum[5];
 
-//加速度原始数据
+//鍔犻?熷害鍘熷鏁版嵁
 u16 AccNum[3] = { 0 };
-//角速度原始数据
+//瑙掗?熷害鍘熷鏁版嵁
 u16 RotNum[3] = { 0 };
-//欧拉角原始数据
+//娆ф媺瑙掑師濮嬫暟鎹?
 u16 EulNum[3] = { 0 };
-//地磁场原始数据
+//纾佸姏瑙掑師濮嬫暟鎹?
 u16 MagNUM[3] = { 0 };
-//仓温原始数据
+//涔濊酱鏉挎俯搴﹀師濮嬫暟鎹?
 u16 InsTemNum;
 
-
+//娆ф媺瑙掔粨鏋滄暟鎹?
+u16 EulResNum[3] = { 0 };
 
 
 /* USER CODE END PV */
@@ -191,7 +199,7 @@ int main(void)
   MX_TIM7_Init();
   /* USER CODE BEGIN 2 */
 	HAL_IWDG_Refresh(&hiwdg);
-	BasicPoint();
+	BasicPoint(UART1RXCache);
   /* USER CODE END 2 */
 
   /* USER CODE BEGIN RTOS_MUTEX */
@@ -240,7 +248,7 @@ int main(void)
   InitialTaskHandle = osThreadCreate(osThread(InitialTask), NULL);
 
   /* definition and creation of SwitcherTask */
-  osThreadDef(SwitcherTask, SWTask, osPriorityAboveNormal, 0, 128);
+  osThreadDef(SwitcherTask, SWTask, osPriorityHigh, 0, 128);
   SwitcherTaskHandle = osThreadCreate(osThread(SwitcherTask), NULL);
 
   /* USER CODE BEGIN RTOS_THREADS */
@@ -280,8 +288,8 @@ void SystemClock_Config(void)
   RCC_OscInitStruct.LSIState = RCC_LSI_ON;
   RCC_OscInitStruct.PLL.PLLState = RCC_PLL_ON;
   RCC_OscInitStruct.PLL.PLLSource = RCC_PLLSOURCE_HSE;
-  RCC_OscInitStruct.PLL.PLLM = 4;
-  RCC_OscInitStruct.PLL.PLLN = 168;
+  RCC_OscInitStruct.PLL.PLLM = 2;
+  RCC_OscInitStruct.PLL.PLLN = 96;
   RCC_OscInitStruct.PLL.PLLP = RCC_PLLP_DIV2;
   RCC_OscInitStruct.PLL.PLLQ = 4;
   if (HAL_RCC_OscConfig(&RCC_OscInitStruct) != HAL_OK)
@@ -434,9 +442,9 @@ static void MX_TIM1_Init(void)
   /* USER CODE BEGIN TIM1_Init 1 */
   /* USER CODE END TIM1_Init 1 */
   htim1.Instance = TIM1;
-  htim1.Init.Prescaler = 167;
+  htim1.Init.Prescaler = 191;
   htim1.Init.CounterMode = TIM_COUNTERMODE_UP;
-  htim1.Init.Period = 50000;
+  htim1.Init.Period = 49999;
   htim1.Init.ClockDivision = TIM_CLOCKDIVISION_DIV1;
   htim1.Init.RepetitionCounter = 0;
   htim1.Init.AutoReloadPreload = TIM_AUTORELOAD_PRELOAD_DISABLE;
@@ -517,9 +525,9 @@ static void MX_TIM2_Init(void)
   /* USER CODE BEGIN TIM2_Init 1 */
   /* USER CODE END TIM2_Init 1 */
   htim2.Instance = TIM2;
-  htim2.Init.Prescaler = 83;
+  htim2.Init.Prescaler = 95;
   htim2.Init.CounterMode = TIM_COUNTERMODE_UP;
-  htim2.Init.Period = 50000;
+  htim2.Init.Period = 49999;
   htim2.Init.ClockDivision = TIM_CLOCKDIVISION_DIV1;
   htim2.Init.AutoReloadPreload = TIM_AUTORELOAD_PRELOAD_DISABLE;
   if (HAL_TIM_Base_Init(&htim2) != HAL_OK)
@@ -585,9 +593,9 @@ static void MX_TIM3_Init(void)
   /* USER CODE BEGIN TIM3_Init 1 */
   /* USER CODE END TIM3_Init 1 */
   htim3.Instance = TIM3;
-  htim3.Init.Prescaler = 83;
+  htim3.Init.Prescaler = 95;
   htim3.Init.CounterMode = TIM_COUNTERMODE_UP;
-  htim3.Init.Period = 50000;
+  htim3.Init.Period = 49999;
   htim3.Init.ClockDivision = TIM_CLOCKDIVISION_DIV1;
   htim3.Init.AutoReloadPreload = TIM_AUTORELOAD_PRELOAD_DISABLE;
   if (HAL_TIM_Base_Init(&htim3) != HAL_OK)
@@ -649,9 +657,9 @@ static void MX_TIM7_Init(void)
 
   /* USER CODE END TIM7_Init 1 */
   htim7.Instance = TIM7;
-  htim7.Init.Prescaler = 3359;
+  htim7.Init.Prescaler = 3839;
   htim7.Init.CounterMode = TIM_COUNTERMODE_UP;
-  htim7.Init.Period = 25000;
+  htim7.Init.Period = 24999;
   htim7.Init.AutoReloadPreload = TIM_AUTORELOAD_PRELOAD_ENABLE;
   if (HAL_TIM_Base_Init(&htim7) != HAL_OK)
   {
@@ -687,9 +695,9 @@ static void MX_TIM14_Init(void)
 
   /* USER CODE END TIM14_Init 1 */
   htim14.Instance = TIM14;
-  htim14.Init.Prescaler = 41;
+  htim14.Init.Prescaler = 47;
   htim14.Init.CounterMode = TIM_COUNTERMODE_UP;
-  htim14.Init.Period = 5000;
+  htim14.Init.Period = 4999;
   htim14.Init.ClockDivision = TIM_CLOCKDIVISION_DIV1;
   htim14.Init.AutoReloadPreload = TIM_AUTORELOAD_PRELOAD_DISABLE;
   if (HAL_TIM_Base_Init(&htim14) != HAL_OK)
@@ -998,7 +1006,7 @@ void CtrlTask(void const * argument)
 	  u8 WarnNum = 0;
 	  u8 PowerNum = ADCCache[0] / 4096 * 3.3 * 50;
 	  HAL_IWDG_Refresh(&hiwdg);
-	  BasicControl();
+	  BasicControl(MoveCCR, &TIM3->CCR1, &TIM3->CCR3, &TIM3->CCR4, &TIM14->CCR1);
 	  if (SWPassback)
 	  {
 		 if (ADCCache[1] > 3100)
@@ -1015,7 +1023,7 @@ void CtrlTask(void const * argument)
 	  HAL_UART_Receive_DMA(&huart1, UART1RXCache, UART1RXLen);
 	  
 	  vTaskSuspend(ControlTaskHandle);
-    osDelay(1);
+    osDelay(5);
   }
   /* USER CODE END 5 */ 
 }
@@ -1040,37 +1048,37 @@ void DisTask(void const * argument)
 		  DisPower(&huart4, PowerNum);
 		  if (ADCCache[1] > 3100)
 		  {
-			  DisWarning(&huart4, 0);
+			  DisWarning(&huart2, 0);
 			  osDelay(5);
 		  }
 		  else
 		  {
-			  DisWarning(&huart4, 3);
+			  DisWarning(&huart2, 3);
 			  osDelay(5);
 		  }
 		  HAL_IWDG_Refresh(&hiwdg);
 		  if (ADCCache[2] > 3100)
 		  {
-			  DisWarning(&huart4, 1);
+			  DisWarning(&huart2, 1);
 			  osDelay(5);
 		  }
 		  else
 		  {
-			  DisWarning(&huart4, 4);
+			  DisWarning(&huart2, 4);
 			  osDelay(5);
 		  }
 		  HAL_IWDG_Refresh(&hiwdg);
 	  }
 	  if (SWWaterDeep)
 	  {
-		  DisWaterDeep(&huart4, WaterDepthNum, WaterTempertureNum);
+		  DisWaterDeep(&huart2, WaterDepthNum, WaterTempertureNum);
 		  osDelay(5);
 		  HAL_IWDG_Refresh(&hiwdg);
 	  }
 	  
 	  if (SWAttitudeSensor)
 	  {
-		  //DisAttitude()
+		  DisAttitude(&huart2, EulResNum[0], EulResNum[1], EulResNum[2], InsTemNum);
 		  osDelay(5);
 		  HAL_IWDG_Refresh(&hiwdg);
 	  }
@@ -1095,6 +1103,8 @@ void WDTask(void const * argument)
   for(;;)
   {
 	  DeepAnalyze(UART4RXPosition, &WaterDepth, &WaterTemperture, WaterDepthNum, WaterTempertureNum);
+	  HAL_UART_Receive_DMA(&huart4, UART3RXCache, UART3RXLen);
+	  __HAL_UART_ENABLE_IT(&huart4, UART_IT_IDLE);
 	  HAL_IWDG_Refresh(&hiwdg);
 	  vTaskSuspend(WaterDeepTaskHandle);
     osDelay(1);
@@ -1115,9 +1125,13 @@ void AttTask(void const * argument)
   /* Infinite loop */
   for(;;)
   {
+	  AttitudeTake(EulResNum, AccNum, RotNum, EulNum, MagNUM, &InsTemNum);
+	  HAL_UART_Receive_DMA(&huart3, UART3RXCache, UART3RXLen);
+	  __HAL_UART_ENABLE_IT(&huart3, UART_IT_IDLE);
+	  
 	  HAL_IWDG_Refresh(&hiwdg);
 	  vTaskSuspend(AttitudeTaskHandle);
-    osDelay(1);
+    osDelay(2);
   }
   /* USER CODE END AttTask */
 }
@@ -1175,13 +1189,15 @@ void InitTask(void const * argument)
 	vTaskSuspend(WaterDeepTaskHandle);
 	vTaskSuspend(DisplayTaskHandle);
 	vTaskSuspend(AutoMoveTaskHandle);
-	__HAL_UART_ENABLE_IT(&huart1, UART_IT_IDLE);
 	HAL_UART_Receive_DMA(&huart1, UART1RXCache, UART1RXLen);
+	__HAL_UART_ENABLE_IT(&huart1, UART_IT_IDLE);
+	HAL_TIM_PWM_Start(&htim3, TIM_CHANNEL_3);
+	HAL_TIM_PWM_Start(&htim14, TIM_CHANNEL_1);
+	HAL_TIM_Base_Start_IT(&htim7);
 	while (!SystemBegin)
 	{
 		HAL_IWDG_Refresh(&hiwdg);
 	}
-	HAL_TIM_Base_Start_IT(&htim7);
 	HAL_TIM_PWM_Start(&htim1, TIM_CHANNEL_1);
 	HAL_TIM_PWM_Start(&htim1, TIM_CHANNEL_2);
 	HAL_TIM_PWM_Start(&htim1, TIM_CHANNEL_3);
@@ -1191,9 +1207,8 @@ void InitTask(void const * argument)
 	HAL_TIM_PWM_Start(&htim2, TIM_CHANNEL_3);
 	HAL_TIM_PWM_Start(&htim2, TIM_CHANNEL_4);
 	HAL_TIM_PWM_Start(&htim3, TIM_CHANNEL_1);
-	HAL_TIM_PWM_Start(&htim3, TIM_CHANNEL_3);
 	HAL_TIM_PWM_Start(&htim3, TIM_CHANNEL_4);
-	HAL_TIM_PWM_Start(&htim14, TIM_CHANNEL_1);
+	
 	TIM1->CCR1 = 1500;
 	TIM1->CCR2 = 1500;
 	TIM1->CCR3 = 1500;
@@ -1205,7 +1220,7 @@ void InitTask(void const * argument)
 	TIM3->CCR1 = 1500;
 	TIM3->CCR3 = 1500;
 	TIM3->CCR4 = 1500;
-	TIM14->CCR1 = 1100;
+	TIM14->CCR1 = 0;
 	if (SWDisplayWords)
 	{
 		vTaskResume(DisplayTaskHandle);
@@ -1220,14 +1235,15 @@ void InitTask(void const * argument)
 	}
 	if (SWWaterDeep)
 	{
-		__HAL_UART_ENABLE_IT(&huart4, UART_IT_IDLE);
 		HAL_UART_Receive_DMA(&huart4, UART4RXCache, UART4RXLen);
+		__HAL_UART_ENABLE_IT(&huart4, UART_IT_IDLE);
+		
 	}
 	if (SWAttitudeSensor)
 	{
-		vTaskResume(AttitudeTaskHandle);
-		__HAL_UART_ENABLE_IT(&huart3, UART_IT_IDLE);
+		AttitudePoint(UART3RXCache);
 		HAL_UART_Receive_DMA(&huart3, UART3RXCache, UART3RXLen);
+		__HAL_UART_ENABLE_IT(&huart3, UART_IT_IDLE);
 	}
 	
 	HAL_IWDG_Refresh(&hiwdg);
@@ -1256,39 +1272,43 @@ void SWTask(void const * argument)
 	  HAL_IWDG_Refresh(&hiwdg);
 	  if (TaskBeingChangeFlag)
 	  {
-		  //这玩意儿可能比1大 必须置零
+		  //
 		  TaskBeingChangeFlag = 0;
 		  if (WaterDeepTaskFlag)
 		  {
-			  --WaterDeepTaskFlag;
+			  WaterDeepTaskFlag=0;
 			  vTaskResume(WaterDeepTaskHandle);
 			  osDelay(2);
 		  }
 		  if (ControlTaskFlag)
 		  {
-			  --ControlTaskFlag;
+			  ControlTaskFlag = 0;
 			  vTaskResume(ControlTaskHandle);
 			  osDelay(2);
 		  }
-		  //这个用不到 但注释掉用作保留
+		  //
 //		  if (DisplayTaskFlag)
 //		  {
-//			  --DisplayTaskFlag;
+//			  DisplayTaskFlag=0;
 //			  vTaskResume(DisplayTaskHandle);osDelay(2);
 //		  }
 		  if(AttitudeTaskFlag)
 		  {
-			  --AttitudeTaskFlag;
+			  AttitudeTaskFlag = 0;
 			  vTaskResume(AttitudeTaskHandle);
 			  osDelay(2);
 		  }
-		  //在我整出来有效的算法之前这玩意儿一直就是废的
+		  //
 //		  if (AutoMoveTaskFlag)
 //		  {
-//			  --AutoMoveTaskFlag;
+//			  AutoMoveTaskFlag=0;
 //			  vTaskResume(AutoMoveTaskHandle);
 //			  osDelay(2);
 //		  }
+	  }
+	  else
+	  {
+		  osDelay(1);
 	  }
   }
   /* USER CODE END SWTask */

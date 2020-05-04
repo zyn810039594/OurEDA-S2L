@@ -1,6 +1,8 @@
 #ifndef _DISPLAY_H
 #define _DISPLAY_H
 
+#include "stm32f4xx_hal.h"
+
 //警告1位置
 #define POSX_WARN1_HIGH 0x00
 #define POSX_WARN1_LOW 0x00

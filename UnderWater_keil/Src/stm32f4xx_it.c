@@ -36,7 +36,6 @@
 /* USER CODE BEGIN TD */
 typedef unsigned char u8;
 typedef unsigned short u16;
-typedef TaskHandle_t osThreadId;
 /* USER CODE END TD */
 
 /* Private define ------------------------------------------------------------*/
@@ -99,9 +98,6 @@ extern u8 UART1RXCache[30];
 extern u8 UART3RXCache[30];
 extern u8 UART4RXCache[40];
 extern u8* UART4RXPosition;
-extern volatile u8 UART1EndFlag;
-extern volatile u8 UART3EndFlag;
-extern volatile u8 UART4EndFlag;
 extern volatile u8 SystemBegin;
 /* USER CODE END EV */
 
@@ -322,11 +318,10 @@ void USART1_IRQHandler(void)
 			{
 				if (SystemBegin)
 				{
-					UART1EndFlag = 1; 
 					__HAL_UART_DISABLE_IT(&huart1, UART_IT_IDLE);
-					RestFlag = 0;;
-					++TaskBeingChangeFlag;
-					++ControlTaskFlag;
+					RestFlag = 0;
+					TaskBeingChangeFlag=1;
+					ControlTaskFlag=1;
 				}
 				else
 				{
@@ -378,29 +373,27 @@ void USART3_IRQHandler(void)
 	{ 
 		__HAL_UART_CLEAR_IDLEFLAG(&huart3); 
 		temp = huart3.Instance->SR; 
-		temp = huart1.Instance->DR; 
+		temp = huart3.Instance->DR; 
 		HAL_UART_DMAStop(&huart3); 
 		temp  = __HAL_DMA_GET_COUNTER(&hdma_usart3_rx); 
-		u8 U3_Rec_Len =  UART1RXLen - temp; 
-		if (U3_Rec_Len >= 23)
+		u8 U3_Rec_Len =  UART3RXLen - temp; 
+		if (U3_Rec_Len == 44)
 		{
-			if ((UART3RXCache[20] == 0x21)&&(UART3RXCache[0] == 0x25))
+			if ((UART3RXCache[0] == 0x55)&&(UART3RXCache[22] == 0x55))
 			{
-			
-				UART3EndFlag = 1; 
 				__HAL_UART_DISABLE_IT(&huart3, UART_IT_IDLE);
-				++TaskBeingChangeFlag;
-				++AttitudeTaskFlag;
+				TaskBeingChangeFlag=1;
+				AttitudeTaskFlag=1;
 				
 			}
 			else
 			{
-				HAL_UART_Receive_DMA(&huart3, UART1RXCache, UART1RXLen);
+				HAL_UART_Receive_DMA(&huart3, UART3RXCache, UART3RXLen);
 			}
 		}
 		else
 		{
-			HAL_UART_Receive_DMA(&huart3, UART1RXCache, UART1RXLen);
+			HAL_UART_Receive_DMA(&huart3, UART3RXCache, UART3RXLen);
 		}
 	}
   /* USER CODE END USART3_IRQn 0 */
@@ -430,6 +423,7 @@ void DMA1_Stream7_IRQHandler(void)
 void UART4_IRQHandler(void)
 {
   /* USER CODE BEGIN UART4_IRQn 0 */
+	static u8 UART4EndFlag = 0;
 	uint32_t tmp_flag = 0;
 	uint32_t temp;
 	tmp_flag = __HAL_UART_GET_FLAG(&huart4, UART_FLAG_IDLE);
@@ -452,10 +446,10 @@ void UART4_IRQHandler(void)
 						if (UART4RXCache[j] == '\n')
 						{
 							UART4RXPosition = &UART4RXCache[i];
-							UART4EndFlag = 1; 
+							UART4EndFlag = 1;
 							__HAL_UART_DISABLE_IT(&huart4, UART_IT_IDLE);
-							++TaskBeingChangeFlag;
-							++WaterDeepTaskFlag;
+							TaskBeingChangeFlag=1;
+							WaterDeepTaskFlag=1;
 							break;
 						}
 					}
@@ -503,7 +497,7 @@ void TIM7_IRQHandler(void)
 	static u8 LightClipTimer = 0;
 	if (RestFlag)
 	{
-		if (RestTimer == 120)
+		if (RestTimer == 20)
 		{
 			switch (LightClipTimer)
 			{

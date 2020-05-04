@@ -1,13 +1,15 @@
 #ifndef _SETTING_H
 #define _SETTING_H
 
+
+
 //功能开启标志位
 //对电池电量的检测
 #define SWPowerScanner 1
 //对姿态传感器的检测
-#define SWAttitudeSensor 0
+#define SWAttitudeSensor 1
 //视频叠加字符输出
-#define SWDisplayWords 0
+#define SWDisplayWords 1
 //多组装形式的支持
 #define SWTransMode 0
 //姿态控制的支持

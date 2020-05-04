@@ -1,5 +1,4 @@
 #include "main.h"
-#include "cmsis_os.h"
 #include "BasicCtrl.h"
 #include "Attitude.h"
 #include "Setting.h"
@@ -20,6 +19,7 @@ static u8 NMoveMode;
 
 static volatile uint32_t* MoveCCR[4] = { &(TIM1->CCR1), &(TIM1->CCR2), &(TIM1->CCR3), &(TIM1->CCR4) };
 
+//定向指针
 u16* PPortrait = 0;
 u16* PRotate = 0;
 u16* PVertical = 0;
@@ -51,42 +51,40 @@ u8 XorCaculate(u8* CalString, u8 CalStringSize);
 void MoveDataAnalyze();
 void BasicPoint();
 void BasicControl();
-void FFMove();
-void SixMove();
-void EightMove();
-void(*BasicMove[3])() = { SixMove, FFMove, EightMove };
-void(*AttitudeMove[4])(u8) = { NormalMode, PitchMode, RowMode, MixMode };
+void FFMove(volatile uint32_t* MoveThruster[8]);
+void SixMove(volatile uint32_t* MoveThruster[8]);
+void EightMove(volatile uint32_t* MoveThruster[8]);
+void(*BasicMove[3])(volatile uint32_t*[8]) = { SixMove, FFMove, EightMove };
+void(*AttitudeMove[4])(u8, volatile uint32_t*[8], unsigned short, unsigned short) = { NormalMode, PitchMode, RowMode, MixMode };
 void(*OrientMove[3])() = { SOrientMove, FFOrientMove, EOrientMove };
 void(*DeepkeepingMove[3])() = { SDeepkeepingMove, FFDeepkeepingMove, EDeepkeepingMove };
 
 
-extern u8 UART1RXCache[UART1RXLen];
-
 //指针定向函数
-void BasicPoint()
+void BasicPoint(u8* SerialData)
 {
-	PPortrait = (u16*)(UART1RXCache + 1);
-	PRotate = (u16*)(UART1RXCache + 3);
-	PVertical = (u16*)(UART1RXCache + 5);
-	PROver = (u16*)(UART1RXCache + 7); 
-	PLight = (u16*)(UART1RXCache + 9);
-	PPTZ = (u16*)(UART1RXCache + 11);
-	PClip = (u16*)(UART1RXCache + 13);
-	PFlip = (u16*)(UART1RXCache + 15);
-	PTransverse = UART1RXCache + 17;
+	PPortrait = (u16*)(SerialData + 1);
+	PRotate = (u16*)(SerialData + 3);
+	PVertical = (u16*)(SerialData + 5);
+	PROver = (u16*)(SerialData + 7); 
+	PLight = (u16*)(SerialData + 9);
+	PPTZ = (u16*)(SerialData + 11);
+	PClip = (u16*)(SerialData + 13);
+	PFlip = (u16*)(SerialData + 15);
+	PTransverse = SerialData + 17;
 	if (SWAutoMove)
 	{
-		POrient = UART1RXCache + 18;
-		PDeepkeeping = UART1RXCache + 19;
+		POrient = SerialData + 18;
+		PDeepkeeping = SerialData + 19;
 	}
 	
 	if (SWTransMode)
 	{
-		PMode = UART1RXCache + 20;
+		PMode = SerialData + 20;
 	}
 	if (SWAttitudeControl)
 	{
-		PAttitude = UART1RXCache + 21;
+		PAttitude = SerialData + 21;
 	}
 	if (SWPassback)
 	{
@@ -118,28 +116,28 @@ void BasicPoint()
 }
 
 //基本控制程序
-void BasicControl()
+void BasicControl(volatile uint32_t* MoveThruster[8], volatile uint32_t* ClipSteering, volatile uint32_t* PTZSteering, volatile uint32_t* FlipSteering, volatile uint32_t* LightSteering)
 {
 	//先对灯光、舵机等不受模式影响的值进行操作
-	TIM3->CCR1 = *PClip;
-	TIM3->CCR3 = *PPTZ;
-	TIM3->CCR4 = *PFlip;
-	TIM14->CCR1 = *PLight;
+	*ClipSteering = *PClip;
+	*PTZSteering = *PPTZ;
+	*FlipSteering = *PFlip;
+	*LightSteering = *PLight;
 	//运动数据分析
 	MoveDataAnalyze();
 	//运动模式判断
 	switch ((*POrient)+(*PDeepkeeping*2))
 	{
 	case 0:
-		BasicMove[*PMode]();
-		AttitudeMove[*PAttitude](*PMode);
+		BasicMove[*PMode](MoveThruster);
+		AttitudeMove[*PAttitude](*PMode, MoveThruster, *PVertical, *PROver);
 		break;
 	case 1:
 		OrientMove[*PMode]();
-		AttitudeMove[*PAttitude](*PMode);
+		AttitudeMove[*PAttitude](*PMode, MoveThruster, *PVertical, *PROver);
 		break;
 	case 2:
-		BasicMove[*PMode]();
+		BasicMove[*PMode](MoveThruster);
 		DeepkeepingMove[*PMode]();
 		break;
 	case 3:
@@ -148,47 +146,47 @@ void BasicControl()
 		break;
 	}
 }
-void FFMove()
+void FFMove(volatile uint32_t* MoveThruster[8])
 {
 	switch (NMoveMode)
 	{
 	case 1:
-		*MoveCCR[0] = *PRotate;
-		*MoveCCR[1] = *PRotate;
-		*MoveCCR[2] = (1500 - *PRotate + *PPortrait);
-		*MoveCCR[3] = (1500 - *PRotate + *PPortrait);
+		*MoveThruster[0] = *PRotate;
+		*MoveThruster[1] = *PRotate;
+		*MoveThruster[2] = (1500 - *PRotate + *PPortrait);
+		*MoveThruster[3] = (1500 - *PRotate + *PPortrait);
 		break;
 	case 2:
-		*MoveCCR[0] = *PPortrait;
-		*MoveCCR[1] = *PPortrait;
-		*MoveCCR[2] = (1500 - *PRotate + *PPortrait);
-		*MoveCCR[3] = (1500 - *PRotate + *PPortrait);
+		*MoveThruster[0] = *PPortrait;
+		*MoveThruster[1] = *PPortrait;
+		*MoveThruster[2] = (1500 - *PRotate + *PPortrait);
+		*MoveThruster[3] = (1500 - *PRotate + *PPortrait);
 		break;
 	case 3:
-		*MoveCCR[0] = (*PRotate + *PPortrait - 1500);
-		*MoveCCR[1] = (*PRotate + *PPortrait - 1500);
-		*MoveCCR[2] = *PPortrait;
-		*MoveCCR[3] = *PPortrait;
+		*MoveThruster[0] = (*PRotate + *PPortrait - 1500);
+		*MoveThruster[1] = (*PRotate + *PPortrait - 1500);
+		*MoveThruster[2] = *PPortrait;
+		*MoveThruster[3] = *PPortrait;
 		break;
 	case 4:
-		*MoveCCR[0] = (*PRotate + *PPortrait - 1500);
-		*MoveCCR[1] = (*PRotate + *PPortrait - 1500);
-		*MoveCCR[2] = (2500 - *PRotate);
-		*MoveCCR[3] = (2500 - *PRotate);
+		*MoveThruster[0] = (*PRotate + *PPortrait - 1500);
+		*MoveThruster[1] = (*PRotate + *PPortrait - 1500);
+		*MoveThruster[2] = (3000 - *PRotate);
+		*MoveThruster[3] = (3000 - *PRotate);
 		break;
 	case 5:
-		*MoveCCR[0] = *PRotate;
-		*MoveCCR[1] = (2500 - *PRotate);
-		*MoveCCR[2] = *PRotate;
-		*MoveCCR[3] = 2500 - *PRotate;
+		*MoveThruster[0] = *PRotate;
+		*MoveThruster[1] = (3000 - *PRotate);
+		*MoveThruster[2] = *PRotate;
+		*MoveThruster[3] = 3000 - *PRotate;
 		break;
 	}
 }
-void SixMove()
+void SixMove(volatile uint32_t* MoveThruster[8])
 {
 	
 }
-void EightMove()
+void EightMove(volatile uint32_t* MoveThruster[8])
 {
 	
 }
@@ -205,6 +203,10 @@ void MoveDataAnalyze()
 	if ((*PVertical > 1500 - RegFloating)&&(*PVertical < 1500 + RegFloating))
 	{
 		*PVertical = 1500;
+	}
+	if ((*PROver > 1500 - RegFloating)&&(*PROver < 1500 + RegFloating))
+	{
+		*PROver = 1500;
 	}
 	if (*PTransverse)
 	{

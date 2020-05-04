@@ -414,4 +414,9 @@
       <Filter>Header files\MyCode</Filter>
     </ClInclude>
   </ItemGroup>
+  <ItemGroup>
+    <LinkerScript Include="STM32F407VE_flash.lds">
+      <Filter>Source files</Filter>
+    </LinkerScript>
+  </ItemGroup>
 </Project>

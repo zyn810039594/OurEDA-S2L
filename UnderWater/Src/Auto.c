@@ -1,5 +1,4 @@
 #include "main.h"
-#include "cmsis_os.h"
 #include "Auto.h"
 #include "Setting.h"
 

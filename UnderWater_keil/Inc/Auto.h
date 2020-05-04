@@ -1,6 +1,8 @@
 #ifndef _AUTO_H
 #define _AUTO_H
 
+#include "stm32f4xx_hal.h"
+
 void FFOrientMove();
 void FFDeepkeepingMove();
 void SOrientMove();

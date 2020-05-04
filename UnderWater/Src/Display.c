@@ -1,5 +1,4 @@
 #include "main.h"
-#include "cmsis_os.h"
 #include "Display.h"
 #include "Setting.h"
 #include "BasicCtrl.h"
