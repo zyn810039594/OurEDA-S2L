@@ -3,14 +3,14 @@
 
 //如要开启串口转发程序请取消注释掉下面的define,默认串口2
 //#define SerialTransmit
-
+# 14 "F:\\Emb\\OurEDA-S2L\\Surface\\Surface\\sketches\\Surface.ino"
 //方便使用的定义
 typedef unsigned char u8;
 typedef unsigned short u16;
 //模拟口数据采集定义
-# 18 "F:\\Emb\\OurEDA-S2L\\Surface\\Surface\\sketches\\Surface.ino"
+# 26 "F:\\Emb\\OurEDA-S2L\\Surface\\Surface\\sketches\\Surface.ino"
 //数字口数据采集定义
-# 36 "F:\\Emb\\OurEDA-S2L\\Surface\\Surface\\sketches\\Surface.ino"
+# 44 "F:\\Emb\\OurEDA-S2L\\Surface\\Surface\\sketches\\Surface.ino"
 //串口波特率
 
 
@@ -211,6 +211,10 @@ void IOInit()
  pinMode(44, 0x0);
  pinMode(45, 0x0);
  Serial.begin(115200);
+
+
+
+
  //开辟字符串用内存空间
  SendString = (u8*)malloc(23);
  //指针定向

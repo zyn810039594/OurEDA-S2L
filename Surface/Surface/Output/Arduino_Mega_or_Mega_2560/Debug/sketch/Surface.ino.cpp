@@ -5,6 +5,14 @@
 //如要开启串口转发程序请取消注释掉下面的define,默认串口2
 //#define SerialTransmit
 
+#ifdef SerialTransmit
+
+//转发串口波特率
+#define TransSerialBaud 921600
+
+#endif // SerialTransmit
+
+
 //方便使用的定义
 typedef unsigned char u8;
 typedef unsigned short u16;
@@ -141,17 +149,17 @@ u8 RecBuf = 0;
 u8 LateBuf = 0;
 
 //定时器中断
-#line 142 "F:\\Emb\\OurEDA-S2L\\Surface\\Surface\\sketches\\Surface.ino"
+#line 150 "F:\\Emb\\OurEDA-S2L\\Surface\\Surface\\sketches\\Surface.ino"
 void TimerInterrupt();
-#line 216 "F:\\Emb\\OurEDA-S2L\\Surface\\Surface\\sketches\\Surface.ino"
+#line 224 "F:\\Emb\\OurEDA-S2L\\Surface\\Surface\\sketches\\Surface.ino"
 void IOInit();
-#line 273 "F:\\Emb\\OurEDA-S2L\\Surface\\Surface\\sketches\\Surface.ino"
+#line 285 "F:\\Emb\\OurEDA-S2L\\Surface\\Surface\\sketches\\Surface.ino"
 void InfTake();
-#line 340 "F:\\Emb\\OurEDA-S2L\\Surface\\Surface\\sketches\\Surface.ino"
-void setup();
 #line 352 "F:\\Emb\\OurEDA-S2L\\Surface\\Surface\\sketches\\Surface.ino"
+void setup();
+#line 364 "F:\\Emb\\OurEDA-S2L\\Surface\\Surface\\sketches\\Surface.ino"
 void loop();
-#line 142 "F:\\Emb\\OurEDA-S2L\\Surface\\Surface\\sketches\\Surface.ino"
+#line 150 "F:\\Emb\\OurEDA-S2L\\Surface\\Surface\\sketches\\Surface.ino"
 void TimerInterrupt()
 {
 	if (LateBuf==3)
@@ -246,6 +254,10 @@ void IOInit()
 	pinMode(SemiautoClip, INPUT);
 	pinMode(AutoClip, INPUT);
 	Serial.begin(SerialBaud);
+#ifdef SerialTransmit
+	Serial2.begin(TransSerialBaud);
+#endif // SerialTransmit
+
 	//开辟字符串用内存空间
 	SendString = (u8*)malloc(23);
 	//指针定向
