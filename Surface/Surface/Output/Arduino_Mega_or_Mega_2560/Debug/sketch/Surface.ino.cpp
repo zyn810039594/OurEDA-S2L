@@ -1,6 +1,10 @@
 #include <Arduino.h>
 #line 1 "F:\\Emb\\OurEDA-S2L\\Surface\\Surface\\sketches\\Surface.ino"
 #include <FlexiTimer2.h>
+
+//如要开启串口转发程序请取消注释掉下面的define,默认串口2
+//#define SerialTransmit
+
 //方便使用的定义
 typedef unsigned char u8;
 typedef unsigned short u16;
@@ -137,17 +141,17 @@ u8 RecBuf = 0;
 u8 LateBuf = 0;
 
 //定时器中断
-#line 138 "F:\\Emb\\OurEDA-S2L\\Surface\\Surface\\sketches\\Surface.ino"
+#line 142 "F:\\Emb\\OurEDA-S2L\\Surface\\Surface\\sketches\\Surface.ino"
 void TimerInterrupt();
-#line 212 "F:\\Emb\\OurEDA-S2L\\Surface\\Surface\\sketches\\Surface.ino"
+#line 216 "F:\\Emb\\OurEDA-S2L\\Surface\\Surface\\sketches\\Surface.ino"
 void IOInit();
-#line 269 "F:\\Emb\\OurEDA-S2L\\Surface\\Surface\\sketches\\Surface.ino"
+#line 273 "F:\\Emb\\OurEDA-S2L\\Surface\\Surface\\sketches\\Surface.ino"
 void InfTake();
-#line 336 "F:\\Emb\\OurEDA-S2L\\Surface\\Surface\\sketches\\Surface.ino"
+#line 340 "F:\\Emb\\OurEDA-S2L\\Surface\\Surface\\sketches\\Surface.ino"
 void setup();
-#line 348 "F:\\Emb\\OurEDA-S2L\\Surface\\Surface\\sketches\\Surface.ino"
+#line 352 "F:\\Emb\\OurEDA-S2L\\Surface\\Surface\\sketches\\Surface.ino"
 void loop();
-#line 138 "F:\\Emb\\OurEDA-S2L\\Surface\\Surface\\sketches\\Surface.ino"
+#line 142 "F:\\Emb\\OurEDA-S2L\\Surface\\Surface\\sketches\\Surface.ino"
 void TimerInterrupt()
 {
 	if (LateBuf==3)
@@ -363,7 +367,12 @@ void loop()
 	// put your main code here, to run repeatedly:
 	if(Serial.available() > 0)
 	{
+#ifdef SerialTransmit
+		Serial2.print(Serial.read());
+#else
 		Serial.read();
+#endif // SerialTransmit
+
 		++CheckRec;
 		if (CheckRec==37)
 		{

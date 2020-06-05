@@ -1,12 +1,16 @@
 # 1 "F:\\Emb\\OurEDA-S2L\\Surface\\Surface\\sketches\\Surface.ino"
 # 2 "F:\\Emb\\OurEDA-S2L\\Surface\\Surface\\sketches\\Surface.ino" 2
+
+//如要开启串口转发程序请取消注释掉下面的define,默认串口2
+//#define SerialTransmit
+
 //方便使用的定义
 typedef unsigned char u8;
 typedef unsigned short u16;
 //模拟口数据采集定义
-# 14 "F:\\Emb\\OurEDA-S2L\\Surface\\Surface\\sketches\\Surface.ino"
+# 18 "F:\\Emb\\OurEDA-S2L\\Surface\\Surface\\sketches\\Surface.ino"
 //数字口数据采集定义
-# 32 "F:\\Emb\\OurEDA-S2L\\Surface\\Surface\\sketches\\Surface.ino"
+# 36 "F:\\Emb\\OurEDA-S2L\\Surface\\Surface\\sketches\\Surface.ino"
 //串口波特率
 
 
@@ -328,7 +332,12 @@ void loop()
  // put your main code here, to run repeatedly:
  if(Serial.available() > 0)
  {
+
+
+
   Serial.read();
+
+
   ++CheckRec;
   if (CheckRec==37)
   {

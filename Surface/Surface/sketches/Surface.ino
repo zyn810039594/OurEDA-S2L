@@ -1,4 +1,8 @@
 #include <FlexiTimer2.h>
+
+//如要开启串口转发程序请取消注释掉下面的define,默认串口2
+//#define SerialTransmit
+
 //方便使用的定义
 typedef unsigned char u8;
 typedef unsigned short u16;
@@ -350,7 +354,12 @@ void loop()
 	// put your main code here, to run repeatedly:
 	if(Serial.available() > 0)
 	{
+#ifdef SerialTransmit
+		Serial2.print(Serial.read());
+#else
 		Serial.read();
+#endif // SerialTransmit
+
 		++CheckRec;
 		if (CheckRec==37)
 		{
