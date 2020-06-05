@@ -3,7 +3,7 @@
 
 #include "stm32f4xx_hal.h"
 
-#define RegFloating 5
+#define RegFloating 25
 
 void BasicPoint(unsigned char* SerialData);
 void BasicControl(volatile uint32_t* MoveThruster[8], volatile uint32_t* ClipSteering, volatile uint32_t* PTZSteering, volatile uint32_t* FlipSteering, volatile uint32_t* LightSteering);

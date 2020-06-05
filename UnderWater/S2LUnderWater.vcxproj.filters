@@ -393,7 +393,10 @@
     <ClCompile Include="Src\BasicCtrl.c">
       <Filter>Source files\MyCode</Filter>
     </ClCompile>
-    <ClCompile Include="Src\Display.c">
+    <ClCompile Include="Src\Display_QL800.c">
+      <Filter>Source files\MyCode</Filter>
+    </ClCompile>
+    <ClCompile Include="Src\Display_QL504.c">
       <Filter>Source files\MyCode</Filter>
     </ClCompile>
   </ItemGroup>

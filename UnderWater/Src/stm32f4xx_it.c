@@ -497,6 +497,11 @@ void TIM7_IRQHandler(void)
 	static u8 LightClipTimer = 0;
 	if (RestFlag)
 	{
+		if ((RestTimer % 3 == 2)&&(SystemBegin==1))
+		{
+			TaskBeingChangeFlag = 1;
+			ControlTaskFlag = 1;
+		}
 		if (RestTimer == 20)
 		{
 			switch (LightClipTimer)

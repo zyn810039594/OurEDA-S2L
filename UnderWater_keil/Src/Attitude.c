@@ -98,8 +98,8 @@ void MixMode(u8 Trans, volatile uint32_t* MoveThruster[8], u16 VerticalNum, u16 
 void DeepAnalyze(u8* DataPosition,u16* PDepth,u16*PWaterTemperture,u8* PDN,u8* PWTN)
 {
 	u8 i = 0;
-	PDN[3] = 11;
-	PWTN[2] = 11;
+	PDN[3] = 10;
+	PWTN[2] = 10;
 	if (DataPosition[4] == '.')
 	{
 		PWTN[0] = (DataPosition[2] - '0');

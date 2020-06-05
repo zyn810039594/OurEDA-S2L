@@ -84,7 +84,8 @@
     <ClCompile Include="Src\Attitude.c" />
     <ClCompile Include="Src\Auto.c" />
     <ClCompile Include="Src\BasicCtrl.c" />
-    <ClCompile Include="Src\Display.c" />
+    <ClCompile Include="Src\Display_QL504.c" />
+    <ClCompile Include="Src\Display_QL800.c" />
     <ClCompile Include="Src\freertos.c" />
     <ClCompile Include="Src\stm32f4xx_it.c" />
     <ClCompile Include="Src\stm32f4xx_hal_msp.c" />

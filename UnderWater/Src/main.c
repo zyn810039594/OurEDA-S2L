@@ -1007,18 +1007,19 @@ void CtrlTask(void const * argument)
 	  u8 PowerNum = ADCCache[0] / 4096 * 3.3 * 50;
 	  HAL_IWDG_Refresh(&hiwdg);
 	  BasicControl(MoveCCR, &TIM3->CCR1, &TIM3->CCR3, &TIM3->CCR4, &TIM14->CCR1);
-	  if (SWPassback)
+	  
+#ifdef SWPassback
+	  if (ADCCache[1] > 3100)
 	  {
-		 if (ADCCache[1] > 3100)
-		  {
-			  WarnNum += 1;
-		  }
-		  if (ADCCache[2] > 3100)
-		  {
-			  WarnNum += 2;
-		  }
-		  PassBack(&huart1, PowerNum, WarnNum, AccNum, RotNum, EulNum, MagNUM, InsTemNum, WaterTemperture, WaterDepth);
+		  WarnNum += 1;
 	  }
+	  if (ADCCache[2] > 3100)
+	  {
+		  WarnNum += 2;
+	  }
+	  PassBack(&huart1, PowerNum, WarnNum, AccNum, RotNum, EulNum, MagNUM, InsTemNum, WaterTemperture, WaterDepth);
+#endif // SWPassback
+
 	  __HAL_UART_ENABLE_IT(&huart1, UART_IT_IDLE);
 	  HAL_UART_Receive_DMA(&huart1, UART1RXCache, UART1RXLen);
 	  
@@ -1038,50 +1039,84 @@ void CtrlTask(void const * argument)
 void DisTask(void const * argument)
 {
   /* USER CODE BEGIN DisTask */
-	u8 PowerNum;
+	static u8 PowerNum=0;
   /* Infinite loop */
   for(;;)
   {
-	  if (SWPowerScanner)
+#ifdef HardWare_QL800
+
+#ifdef SWPowerScanner
+	  PowerNum = ADCCache[0] / 4096 * 3.3 * 50;
+	  DisPower(&huart4, PowerNum);
+	  if (ADCCache[1] > 3100)
 	  {
-		  PowerNum = ADCCache[0] / 4096 * 3.3 * 50;
-		  DisPower(&huart4, PowerNum);
-		  if (ADCCache[1] > 3100)
-		  {
-			  DisWarning(&huart2, 0);
-			  osDelay(5);
-		  }
-		  else
-		  {
-			  DisWarning(&huart2, 3);
-			  osDelay(5);
-		  }
-		  HAL_IWDG_Refresh(&hiwdg);
-		  if (ADCCache[2] > 3100)
-		  {
-			  DisWarning(&huart2, 1);
-			  osDelay(5);
-		  }
-		  else
-		  {
-			  DisWarning(&huart2, 4);
-			  osDelay(5);
-		  }
-		  HAL_IWDG_Refresh(&hiwdg);
-	  }
-	  if (SWWaterDeep)
-	  {
-		  DisWaterDeep(&huart2, WaterDepthNum, WaterTempertureNum);
+		  DisWarning(&huart2, 0);
 		  osDelay(5);
-		  HAL_IWDG_Refresh(&hiwdg);
 	  }
+	  else
+	  {
+		  DisWarning(&huart2, 3);
+		  osDelay(5);
+	  }
+	  HAL_IWDG_Refresh(&hiwdg);
+	  if (ADCCache[2] > 3100)
+	  {
+		  DisWarning(&huart2, 1);
+		  osDelay(5);
+	  }
+	  else
+	  {
+		  DisWarning(&huart2, 4);
+		  osDelay(5);
+	  }
+	  HAL_IWDG_Refresh(&hiwdg);
+#endif // SWPowerScanner
+
+#ifdef SWWaterDeep
+	  DisWaterDeep(&huart2, WaterDepthNum, WaterTempertureNum);
+	  osDelay(5);
+	  HAL_IWDG_Refresh(&hiwdg);	  
+#endif // SWWaterDeep
+
+#ifdef SWAttitudeSensor
+	  DisAttitude(&huart2, EulResNum[0], EulResNum[1], EulResNum[2], InsTemNum);
+	  osDelay(5);
+	  HAL_IWDG_Refresh(&hiwdg);
+#endif // SWAttitudeSensor
+				  
+#endif // HardWare_QL800
 	  
-	  if (SWAttitudeSensor)
+#ifdef HardWare_QL504
+	  PowerNum = ADCCache[0] / 4096 * 3.3 * 50;
+#ifdef SWPowerScanner
+	  if (ADCCache[1] > 3100)
 	  {
-		  DisAttitude(&huart2, EulResNum[0], EulResNum[1], EulResNum[2], InsTemNum);
+		  DisWarning_QL504(&huart2, hiwdg, 0);
 		  osDelay(5);
-		  HAL_IWDG_Refresh(&hiwdg);
 	  }
+	  else
+	  {
+		  DisWarning_QL504(&huart2, hiwdg, 3);
+		  osDelay(5);
+	  }
+	  HAL_IWDG_Refresh(&hiwdg);
+	  if (ADCCache[2] > 3100)
+	  {
+		  DisWarning_QL504(&huart2, hiwdg, 1);
+		  osDelay(5);
+	  }
+	  else
+	  {
+		  DisWarning_QL504(&huart2, hiwdg, 4);
+		  osDelay(5);
+	  }
+	  HAL_IWDG_Refresh(&hiwdg);
+#endif // SWPowerScanner
+
+	  DisData_QL504(&huart2, hiwdg, WaterDepthNum, WaterTempertureNum, EulResNum[0], EulResNum[1], PowerNum);
+	  
+#endif // HardWare_QL504
+
 	  
 	  HAL_IWDG_Refresh(&hiwdg);
     osDelay(1);
@@ -1193,11 +1228,6 @@ void InitTask(void const * argument)
 	__HAL_UART_ENABLE_IT(&huart1, UART_IT_IDLE);
 	HAL_TIM_PWM_Start(&htim3, TIM_CHANNEL_3);
 	HAL_TIM_PWM_Start(&htim14, TIM_CHANNEL_1);
-	HAL_TIM_Base_Start_IT(&htim7);
-	while (!SystemBegin)
-	{
-		HAL_IWDG_Refresh(&hiwdg);
-	}
 	HAL_TIM_PWM_Start(&htim1, TIM_CHANNEL_1);
 	HAL_TIM_PWM_Start(&htim1, TIM_CHANNEL_2);
 	HAL_TIM_PWM_Start(&htim1, TIM_CHANNEL_3);
@@ -1221,30 +1251,37 @@ void InitTask(void const * argument)
 	TIM3->CCR3 = 1500;
 	TIM3->CCR4 = 1500;
 	TIM14->CCR1 = 0;
-	if (SWDisplayWords)
+	HAL_TIM_Base_Start_IT(&htim7);
+	while (!SystemBegin)
 	{
-		vTaskResume(DisplayTaskHandle);
+		HAL_IWDG_Refresh(&hiwdg);
 	}
-	if (SWAutoMove)
-	{
-		vTaskResume(AutoMoveTaskHandle);
-	}
-	if (SWPowerScanner)
-	{
-		HAL_ADC_Start_DMA(&hadc1, ADCCache, 6);
-	}
-	if (SWWaterDeep)
-	{
-		HAL_UART_Receive_DMA(&huart4, UART4RXCache, UART4RXLen);
-		__HAL_UART_ENABLE_IT(&huart4, UART_IT_IDLE);
-		
-	}
-	if (SWAttitudeSensor)
-	{
-		AttitudePoint(UART3RXCache);
-		HAL_UART_Receive_DMA(&huart3, UART3RXCache, UART3RXLen);
-		__HAL_UART_ENABLE_IT(&huart3, UART_IT_IDLE);
-	}
+	
+#ifdef SWDisplayWords
+	vTaskResume(DisplayTaskHandle);
+#endif // SWDisplayWords
+
+#ifdef SWAutoMove
+	vTaskResume(AutoMoveTaskHandle);		  
+#endif // SWAutoMove
+
+#ifdef SWPowerScanner
+	
+	HAL_ADC_Start_DMA(&hadc1, ADCCache, 6);
+	
+#endif // SWPowerScanner
+	
+#ifdef SWWaterDeep
+	HAL_UART_Receive_DMA(&huart4, UART4RXCache, UART4RXLen);
+	__HAL_UART_ENABLE_IT(&huart4, UART_IT_IDLE);
+#endif // SWWaterDeep
+
+	
+#ifdef SWAttitudeSensor
+	AttitudePoint(UART3RXCache);
+	HAL_UART_Receive_DMA(&huart3, UART3RXCache, UART3RXLen);
+	__HAL_UART_ENABLE_IT(&huart3, UART_IT_IDLE);
+#endif // SWAttitudeSensor
 	
 	HAL_IWDG_Refresh(&hiwdg);
 	vTaskSuspend(InitialTaskHandle);
@@ -1272,39 +1309,53 @@ void SWTask(void const * argument)
 	  HAL_IWDG_Refresh(&hiwdg);
 	  if (TaskBeingChangeFlag)
 	  {
-		  //
 		  TaskBeingChangeFlag = 0;
-		  if (WaterDeepTaskFlag)
-		  {
-			  WaterDeepTaskFlag=0;
-			  vTaskResume(WaterDeepTaskHandle);
-			  osDelay(2);
-		  }
+		  
 		  if (ControlTaskFlag)
 		  {
 			  ControlTaskFlag = 0;
 			  vTaskResume(ControlTaskHandle);
 			  osDelay(2);
 		  }
-		  //
-//		  if (DisplayTaskFlag)
-//		  {
-//			  DisplayTaskFlag=0;
-//			  vTaskResume(DisplayTaskHandle);osDelay(2);
-//		  }
-		  if(AttitudeTaskFlag)
+		  
+#ifdef SWWaterDeep
+		  if (WaterDeepTaskFlag)
+		  {
+			  WaterDeepTaskFlag = 0;
+			  vTaskResume(WaterDeepTaskHandle);
+			  osDelay(2);
+		  }				  
+#endif // SWWaterDeep
+
+
+		  
+#ifdef SWDisplayWords
+		  if (DisplayTaskFlag)
+		  {
+			  DisplayTaskFlag=0;
+			  vTaskResume(DisplayTaskHandle);osDelay(2);
+		  }
+#endif
+
+#ifdef SWAttitudeControl
+		  if (AttitudeTaskFlag)
 		  {
 			  AttitudeTaskFlag = 0;
 			  vTaskResume(AttitudeTaskHandle);
 			  osDelay(2);
 		  }
-		  //
-//		  if (AutoMoveTaskFlag)
-//		  {
-//			  AutoMoveTaskFlag=0;
-//			  vTaskResume(AutoMoveTaskHandle);
-//			  osDelay(2);
-//		  }
+#endif // SWAttitudeControl
+		  
+#ifdef SWAutoMove
+		  if (AutoMoveTaskFlag)
+		  {
+			  AutoMoveTaskFlag = 0;
+			  vTaskResume(AutoMoveTaskHandle);
+			  osDelay(2);
+		  }
+#endif // SWAutoMove
+
+
 	  }
 	  else
 	  {

@@ -35,4 +35,8 @@ void DisWaterDeep(UART_HandleTypeDef* DisUart, unsigned char* WaterDeepNum, unsi
 void DisAttitude(UART_HandleTypeDef* DisUart, unsigned short YawNum, unsigned short PitchNum, unsigned short RollNum, unsigned short InsideTempertureNum);
 void DisPower(UART_HandleTypeDef* DisUart, unsigned char PowerVolNum);
 
+void DisWarning_QL504(UART_HandleTypeDef* DisUart, IWDG_HandleTypeDef IWD_Flash,unsigned char WarningPlace);
+void DisData_QL504(UART_HandleTypeDef* DisUart, IWDG_HandleTypeDef IWD_Flash, unsigned char* WaterDeepNum, unsigned char* WaterTempertureNum, unsigned short YawNum, unsigned short PitchNum, unsigned char PowerVolNum);
+
+
 #endif // !_DISPLAY_H

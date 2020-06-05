@@ -408,11 +408,6 @@
               <FilePath>..\Src\BasicCtrl.c</FilePath>
             </File>
             <File>
-              <FileName>Display.c</FileName>
-              <FileType>1</FileType>
-              <FilePath>..\Src\Display.c</FilePath>
-            </File>
-            <File>
               <FileName>main.c</FileName>
               <FileType>1</FileType>
               <FilePath>../Src/main.c</FilePath>
@@ -436,6 +431,16 @@
               <FileName>stm32f4xx_hal_timebase_tim.c</FileName>
               <FileType>1</FileType>
               <FilePath>../Src/stm32f4xx_hal_timebase_tim.c</FilePath>
+            </File>
+            <File>
+              <FileName>Display_QL504.c</FileName>
+              <FileType>1</FileType>
+              <FilePath>..\Src\Display_QL504.c</FilePath>
+            </File>
+            <File>
+              <FileName>Display_QL800.c</FileName>
+              <FileType>1</FileType>
+              <FilePath>..\Src\Display_QL800.c</FilePath>
             </File>
           </Files>
         </Group>

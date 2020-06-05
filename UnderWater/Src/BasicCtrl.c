@@ -72,46 +72,46 @@ void BasicPoint(u8* SerialData)
 	PClip = (u16*)(SerialData + 13);
 	PFlip = (u16*)(SerialData + 15);
 	PTransverse = SerialData + 17;
-	if (SWAutoMove)
-	{
-		POrient = SerialData + 18;
-		PDeepkeeping = SerialData + 19;
-	}
 	
-	if (SWTransMode)
-	{
-		PMode = SerialData + 20;
-	}
-	if (SWAttitudeControl)
-	{
-		PAttitude = SerialData + 21;
-	}
-	if (SWPassback)
-	{
-		PassBackString = (u8*)malloc(37);
-		PassBackString[0] = 0x25;
-		PassBackString[1] = 0xee;
-		PBackPower = PassBackString + 2;
-		PBackWarn = PassBackString + 3;
-		PBackA[0] = (u16*)(PassBackString + 4);
-		PBackA[1] = (u16*)(PassBackString + 6);
-		PBackA[2] = (u16*)(PassBackString + 8);
-		PBackW[0] = (u16*)(PassBackString + 10);
-		PBackW[1] = (u16*)(PassBackString + 12);
-		PBackW[2] = (u16*)(PassBackString + 14);
-		PBackE[0] = (u16*)(PassBackString + 16);
-		PBackE[1] = (u16*)(PassBackString + 18);
-		PBackE[2] = (u16*)(PassBackString + 20);
-		PBackH[0] = (u16*)(PassBackString + 22);
-		PBackH[1] = (u16*)(PassBackString + 24);
-		PBackH[2] = (u16*)(PassBackString + 26);
-		PBackIT = (u16*)(PassBackString + 28);
-		PBackWT = (u16*)(PassBackString + 30);
-		PBackWD = (u16*)(PassBackString + 32);
-		PBackCheck = PassBackString + 34;
-		PassBackString[35] = 0xFF;
-		PassBackString[36] = 0xFF;
-	}
+#ifdef SWAutoMove
+	POrient = SerialData + 18;
+	PDeepkeeping = SerialData + 19;
+#endif // SWAutoMove
+
+#ifdef SWTransMode
+	PMode = SerialData + 20;
+#endif // SWTransMode
+
+#ifdef SWAttitudeControl
+	PAttitude = SerialData + 21;
+#endif // SWAttitudeControl
+
+#ifdef SWPassback
+	PassBackString = (u8*)malloc(37);
+	PassBackString[0] = 0x25;
+	PassBackString[1] = 0xee;
+	PBackPower = PassBackString + 2;
+	PBackWarn = PassBackString + 3;
+	PBackA[0] = (u16*)(PassBackString + 4);
+	PBackA[1] = (u16*)(PassBackString + 6);
+	PBackA[2] = (u16*)(PassBackString + 8);
+	PBackW[0] = (u16*)(PassBackString + 10);
+	PBackW[1] = (u16*)(PassBackString + 12);
+	PBackW[2] = (u16*)(PassBackString + 14);
+	PBackE[0] = (u16*)(PassBackString + 16);
+	PBackE[1] = (u16*)(PassBackString + 18);
+	PBackE[2] = (u16*)(PassBackString + 20);
+	PBackH[0] = (u16*)(PassBackString + 22);
+	PBackH[1] = (u16*)(PassBackString + 24);
+	PBackH[2] = (u16*)(PassBackString + 26);
+	PBackIT = (u16*)(PassBackString + 28);
+	PBackWT = (u16*)(PassBackString + 30);
+	PBackWD = (u16*)(PassBackString + 32);
+	PBackCheck = PassBackString + 34;
+	PassBackString[35] = 0xFF;
+	PassBackString[36] = 0xFF;
+#endif // SWPassback
+
 	return;
 }
 
