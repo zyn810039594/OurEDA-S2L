@@ -2,7 +2,7 @@ underwater\system_stm32f4xx.o: ../Src/system_stm32f4xx.c
 underwater\system_stm32f4xx.o: ../Drivers/CMSIS/Device/ST/STM32F4xx/Include/stm32f4xx.h
 underwater\system_stm32f4xx.o: ../Drivers/CMSIS/Device/ST/STM32F4xx/Include/stm32f407xx.h
 underwater\system_stm32f4xx.o: ../Drivers/CMSIS/Include/core_cm4.h
-underwater\system_stm32f4xx.o: F:\keil\ARM\ARMCC\Bin\..\include\stdint.h
+underwater\system_stm32f4xx.o: D:\Keil_arm\ARM\ARMCC\Bin\..\include\stdint.h
 underwater\system_stm32f4xx.o: ../Drivers/CMSIS/Include/cmsis_version.h
 underwater\system_stm32f4xx.o: ../Drivers/CMSIS/Include/cmsis_compiler.h
 underwater\system_stm32f4xx.o: ../Drivers/CMSIS/Include/cmsis_armcc.h
@@ -14,7 +14,7 @@ underwater\system_stm32f4xx.o: ../Drivers/STM32F4xx_HAL_Driver/Inc/stm32f4xx_hal
 underwater\system_stm32f4xx.o: ../Drivers/STM32F4xx_HAL_Driver/Inc/stm32f4xx_hal_def.h
 underwater\system_stm32f4xx.o: ../Drivers/CMSIS/Device/ST/STM32F4xx/Include/stm32f4xx.h
 underwater\system_stm32f4xx.o: ../Drivers/STM32F4xx_HAL_Driver/Inc/Legacy/stm32_hal_legacy.h
-underwater\system_stm32f4xx.o: F:\keil\ARM\ARMCC\Bin\..\include\stddef.h
+underwater\system_stm32f4xx.o: D:\Keil_arm\ARM\ARMCC\Bin\..\include\stddef.h
 underwater\system_stm32f4xx.o: ../Drivers/STM32F4xx_HAL_Driver/Inc/stm32f4xx_hal_rcc_ex.h
 underwater\system_stm32f4xx.o: ../Drivers/STM32F4xx_HAL_Driver/Inc/stm32f4xx_hal_exti.h
 underwater\system_stm32f4xx.o: ../Drivers/STM32F4xx_HAL_Driver/Inc/stm32f4xx_hal_gpio.h

@@ -124,6 +124,9 @@
     <Filter Include="Header files\MyCode">
       <UniqueIdentifier>{a580748c-39f7-43a6-b464-8d62f024c4a8}</UniqueIdentifier>
     </Filter>
+    <Filter Include="Source files\MiddleWare">
+      <UniqueIdentifier>{a1607e61-6381-465a-a506-e8eb4d2d95c3}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="Src\freertos.c">
@@ -196,9 +199,6 @@
       <Filter>Source files\STM32Cube HAL\FREERTOS</Filter>
     </ClCompile>
     <ClCompile Include="Middlewares\Third_Party\FreeRTOS\Source\timers.c">
-      <Filter>Source files\STM32Cube HAL\FREERTOS</Filter>
-    </ClCompile>
-    <ClCompile Include="Middlewares\Third_Party\FreeRTOS\Source\portable\MemMang\heap_4.c">
       <Filter>Source files\STM32Cube HAL\FREERTOS</Filter>
     </ClCompile>
     <ClCompile Include="Middlewares\Third_Party\FreeRTOS\Source\portable\GCC\ARM_CM4F\port.c">
@@ -398,6 +398,9 @@
     </ClCompile>
     <ClCompile Include="Src\Display_QL504.c">
       <Filter>Source files\MyCode</Filter>
+    </ClCompile>
+    <ClCompile Include="Middlewares\Third_Party\FreeRTOS\Source\portable\MemMang\heap_4.c">
+      <Filter>Source files\MiddleWare</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>

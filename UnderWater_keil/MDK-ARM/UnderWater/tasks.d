@@ -1,9 +1,9 @@
 underwater\tasks.o: ../Middlewares/Third_Party/FreeRTOS/Source/tasks.c
-underwater\tasks.o: F:\keil\ARM\ARMCC\Bin\..\include\stdlib.h
-underwater\tasks.o: F:\keil\ARM\ARMCC\Bin\..\include\string.h
+underwater\tasks.o: D:\Keil_arm\ARM\ARMCC\Bin\..\include\stdlib.h
+underwater\tasks.o: D:\Keil_arm\ARM\ARMCC\Bin\..\include\string.h
 underwater\tasks.o: ../Middlewares/Third_Party/FreeRTOS/Source/include/FreeRTOS.h
-underwater\tasks.o: F:\keil\ARM\ARMCC\Bin\..\include\stddef.h
-underwater\tasks.o: F:\keil\ARM\ARMCC\Bin\..\include\stdint.h
+underwater\tasks.o: D:\Keil_arm\ARM\ARMCC\Bin\..\include\stddef.h
+underwater\tasks.o: D:\Keil_arm\ARM\ARMCC\Bin\..\include\stdint.h
 underwater\tasks.o: ../Inc/FreeRTOSConfig.h
 underwater\tasks.o: ../Middlewares/Third_Party/FreeRTOS/Source/include/projdefs.h
 underwater\tasks.o: ../Middlewares/Third_Party/FreeRTOS/Source/include/portable.h

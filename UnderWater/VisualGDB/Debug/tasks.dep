@@ -6,7 +6,7 @@ VisualGDB/Debug/tasks.o: Middlewares/Third_Party/FreeRTOS/Source/tasks.c \
  c:\sysgcc\arm-eabi\arm-none-eabi\include\_newlib_version.h \
  c:\sysgcc\arm-eabi\arm-none-eabi\include\sys\config.h \
  c:\sysgcc\arm-eabi\arm-none-eabi\include\sys\features.h \
- c:\sysgcc\arm-eabi\lib\gcc\arm-none-eabi\9.2.1\include\stddef.h \
+ c:\sysgcc\arm-eabi\lib\gcc\arm-none-eabi\9.3.1\include\stddef.h \
  c:\sysgcc\arm-eabi\arm-none-eabi\include\sys\reent.h \
  c:\sysgcc\arm-eabi\arm-none-eabi\include\_ansi.h \
  c:\sysgcc\arm-eabi\arm-none-eabi\include\sys\_types.h \
@@ -17,11 +17,11 @@ VisualGDB/Debug/tasks.o: Middlewares/Third_Party/FreeRTOS/Source/tasks.c \
  c:\sysgcc\arm-eabi\arm-none-eabi\include\machine\stdlib.h \
  c:\sysgcc\arm-eabi\arm-none-eabi\include\alloca.h \
  c:\sysgcc\arm-eabi\arm-none-eabi\include\string.h \
- c:\sysgcc\arm-eabi\arm-none-eabi\include\xlocale.h \
+ c:\sysgcc\arm-eabi\arm-none-eabi\include\sys\_locale.h \
  c:\sysgcc\arm-eabi\arm-none-eabi\include\strings.h \
  c:\sysgcc\arm-eabi\arm-none-eabi\include\sys\string.h \
  Middlewares/Third_Party/FreeRTOS/Source/include/FreeRTOS.h \
- c:\sysgcc\arm-eabi\lib\gcc\arm-none-eabi\9.2.1\include\stdint.h \
+ c:\sysgcc\arm-eabi\lib\gcc\arm-none-eabi\9.3.1\include\stdint.h \
  c:\sysgcc\arm-eabi\arm-none-eabi\include\stdint.h \
  c:\sysgcc\arm-eabi\arm-none-eabi\include\sys\_intsup.h \
  c:\sysgcc\arm-eabi\arm-none-eabi\include\sys\_stdint.h \
@@ -31,6 +31,7 @@ VisualGDB/Debug/tasks.o: Middlewares/Third_Party/FreeRTOS/Source/tasks.c \
  Middlewares/Third_Party/FreeRTOS/Source/include/deprecated_definitions.h \
  Middlewares/Third_Party/FreeRTOS/Source/portable/GCC/ARM_CM4F/portmacro.h \
  Middlewares/Third_Party/FreeRTOS/Source/include/mpu_wrappers.h \
+ c:\sysgcc\arm-eabi\arm-none-eabi\include\reent.h \
  Middlewares/Third_Party/FreeRTOS/Source/include/task.h \
  Middlewares/Third_Party/FreeRTOS/Source/include/list.h \
  Middlewares/Third_Party/FreeRTOS/Source/include/timers.h \
@@ -51,7 +52,7 @@ c:\sysgcc\arm-eabi\arm-none-eabi\include\sys\config.h:
 
 c:\sysgcc\arm-eabi\arm-none-eabi\include\sys\features.h:
 
-c:\sysgcc\arm-eabi\lib\gcc\arm-none-eabi\9.2.1\include\stddef.h:
+c:\sysgcc\arm-eabi\lib\gcc\arm-none-eabi\9.3.1\include\stddef.h:
 
 c:\sysgcc\arm-eabi\arm-none-eabi\include\sys\reent.h:
 
@@ -73,7 +74,7 @@ c:\sysgcc\arm-eabi\arm-none-eabi\include\alloca.h:
 
 c:\sysgcc\arm-eabi\arm-none-eabi\include\string.h:
 
-c:\sysgcc\arm-eabi\arm-none-eabi\include\xlocale.h:
+c:\sysgcc\arm-eabi\arm-none-eabi\include\sys\_locale.h:
 
 c:\sysgcc\arm-eabi\arm-none-eabi\include\strings.h:
 
@@ -81,7 +82,7 @@ c:\sysgcc\arm-eabi\arm-none-eabi\include\sys\string.h:
 
 Middlewares/Third_Party/FreeRTOS/Source/include/FreeRTOS.h:
 
-c:\sysgcc\arm-eabi\lib\gcc\arm-none-eabi\9.2.1\include\stdint.h:
+c:\sysgcc\arm-eabi\lib\gcc\arm-none-eabi\9.3.1\include\stdint.h:
 
 c:\sysgcc\arm-eabi\arm-none-eabi\include\stdint.h:
 
@@ -100,6 +101,8 @@ Middlewares/Third_Party/FreeRTOS/Source/include/deprecated_definitions.h:
 Middlewares/Third_Party/FreeRTOS/Source/portable/GCC/ARM_CM4F/portmacro.h:
 
 Middlewares/Third_Party/FreeRTOS/Source/include/mpu_wrappers.h:
+
+c:\sysgcc\arm-eabi\arm-none-eabi\include\reent.h:
 
 Middlewares/Third_Party/FreeRTOS/Source/include/task.h:
 

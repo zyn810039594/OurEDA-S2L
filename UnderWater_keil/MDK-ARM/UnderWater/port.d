@@ -1,7 +1,7 @@
 underwater\port.o: ../Middlewares/Third_Party/FreeRTOS/Source/portable/RVDS/ARM_CM4F/port.c
 underwater\port.o: ../Middlewares/Third_Party/FreeRTOS/Source/include/FreeRTOS.h
-underwater\port.o: F:\keil\ARM\ARMCC\Bin\..\include\stddef.h
-underwater\port.o: F:\keil\ARM\ARMCC\Bin\..\include\stdint.h
+underwater\port.o: D:\Keil_arm\ARM\ARMCC\Bin\..\include\stddef.h
+underwater\port.o: D:\Keil_arm\ARM\ARMCC\Bin\..\include\stdint.h
 underwater\port.o: ../Inc/FreeRTOSConfig.h
 underwater\port.o: ../Middlewares/Third_Party/FreeRTOS/Source/include/projdefs.h
 underwater\port.o: ../Middlewares/Third_Party/FreeRTOS/Source/include/portable.h

@@ -69,56 +69,56 @@ osThreadId AutoMoveTaskHandle;
 osThreadId InitialTaskHandle;
 osThreadId SwitcherTaskHandle;
 /* USER CODE BEGIN PV */
-//鎬昏繘绋嬪惎鍔ㄨ姹傛爣蹇椾綅
+//闁诡剚妲掔换妯肩矙鐎ｎ亝鍎欓柛鏂诲姀椤曨剙效閸屾稓鍨奸煫鍥ㄣ仦缂??
 volatile u8 TaskBeingChangeFlag = 0;
-//涓绘帶杩涚▼鍚姩璇锋眰鏍囧織浣?
+//濞戞挾绮敮鑸垫交濞戞埃鏌ら柛姘煎灠婵晝鎷犻柨瀣勾闁哄秴娲ょ换鏃?鎷??
 volatile u8 ControlTaskFlag = 0;
-//鏄剧ず杩涚▼鍚姩璇锋眰鏍囧織浣?
+//闁哄嫬澧介妵姘交濞戞埃鏌ら柛姘煎灠婵晝鎷犻柨瀣勾闁哄秴娲ょ换鏃?鎷??
 volatile u8 DisplayTaskFlag = 0;
-//姘存繁妫?娴嬭繘绋嬪惎鍔ㄨ姹傛爣蹇椾綅
+//婵ê鐡ㄧ换浣肝??婵炴潙顑堢换妯肩矙鐎ｎ亝鍎欓柛鏂诲姀椤曨剙效閸屾稓鍨奸煫鍥ㄣ仦缂??
 volatile u8 WaterDeepTaskFlag = 0;
-//涔濊酱璇诲彇杩涚▼鍚姩璇锋眰鏍囧織浣?
+//濞戞梹绻嗛柊杈╂嫚鐠囨彃绲块弶鈺傜〒閳诲ジ宕ラ姘楅悹鍥敱閻即寮介崶褏绠跺ù??
 volatile u8 AttitudeTaskFlag = 0;
-//鑷姩杩愬姩杩涚▼鍚姩璇锋眰鏍囧織浣?
+//闁煎浜滄慨鈺傛交閹邦剙袟閺夆晜绋撻埢濂稿触椤栨艾袟閻犲洭鏀遍惇浼村冀閸パ呯濞???
 volatile u8 AutoMoveTaskFlag = 0;
 
-//鎺ㄨ繘鍣≒WM鍙ｅ畾涔?
+//闁规亽鍔忕换姗?宕抽埉鎵篗闁告瑱绲介悾鐐▕?
 volatile uint32_t* MoveCCR[8] = { &(TIM1->CCR1), &(TIM1->CCR2), &(TIM1->CCR3), &(TIM1->CCR4), &(TIM2->CCR1), &(TIM2->CCR2), &(TIM2->CCR3), &(TIM2->CCR4) };
-//涓插彛1缂撳瓨
+//濞戞挻褰冭ぐ?1缂傚倹鎸搁悺?
 u8 UART1RXCache[UART1RXLen];
-//涓插彛3缂撳瓨
+//濞戞挻褰冭ぐ?3缂傚倹鎸搁悺?
 u8 UART3RXCache[UART3RXLen];
-//涓插彛4缂撳瓨
+//濞戞挻褰冭ぐ?4缂傚倹鎸搁悺?
 u8 UART4RXCache[UART4RXLen];
-//涓插彛4璇诲彇鎸囬拡
+//濞戞挻褰冭ぐ?4閻犲洩顕цぐ鍥箰閸ヮ剚瀚?
 u8* UART4RXPosition = 0;
-//绯荤粺鍚姩鐘舵?佹爣蹇椾綅
+//缂侇垵宕电划娲触椤栨艾袟闁绘鍩??娴ｅ湱鍨奸煫鍥ㄣ仦缂??
 volatile u8 SystemBegin = 0;
 
-//妯℃嫙妫?娴嬬紦瀛?
+//婵☆垪鍓濈?氭瑥螞?婵炴潙顑囩槐锔????
 uint32_t ADCCache[6] = { 0 };
 
-//姘存繁鏁版嵁
+//婵ê鐡ㄧ换渚?寮悧鍫濈ウ
 u16 WaterDepth = 0;
-//姘存俯鏁版嵁
+//婵ê鐡ㄦ穱顖炲极閻楀牆绁?
 u16 WaterTemperture = 0;
-//姘存繁鎸変綅鏁版嵁
+//婵ê鐡ㄧ换渚?骞愭径澶岀Т闁轰胶澧楀畵?
 u8 WaterDepthNum[6];
-//姘存俯鎸変綅鏁版嵁
+//婵ê鐡ㄦ穱顖炲箰婢跺绉撮柡浣哄瀹??
 u8 WaterTempertureNum[5];
 
-//鍔犻?熷害鍘熷鏁版嵁
+//闁告梻濞??閻斿嘲顔婇柛妯煎枎椤劙寮悧鍫濈ウ
 u16 AccNum[3] = { 0 };
-//瑙掗?熷害鍘熷鏁版嵁
+//閻熸瑦甯??閻斿嘲顔婇柛妯煎枎椤劙寮悧鍫濈ウ
 u16 RotNum[3] = { 0 };
-//娆ф媺瑙掑師濮嬫暟鎹?
+//Roll Pitch Yaw
 u16 EulNum[3] = { 0 };
-//纾佸姏瑙掑師濮嬫暟鎹?
+//缁惧彞绀佹慨蹇曟喆閹烘垵鏂у┑顔碱儐閺嗙喖骞??
 u16 MagNUM[3] = { 0 };
-//涔濊酱鏉挎俯搴﹀師濮嬫暟鎹?
+//濞戞梹绻嗛柊閬嶅级閹稿簼鍒婇幖杈剧畱鐢偅鎱ㄧ?ｎ偅娈堕柟??
 u16 InsTemNum;
 
-//娆ф媺瑙掔粨鏋滄暟鎹?
+//婵炲柌鍕?欓悷娆愬笧缁劑寮稿鍕闁???
 u16 EulResNum[3] = { 0 };
 
 
@@ -165,7 +165,6 @@ int main(void)
 {
   /* USER CODE BEGIN 1 */
   /* USER CODE END 1 */
-  
 
   /* MCU Configuration--------------------------------------------------------*/
 
@@ -198,8 +197,10 @@ int main(void)
   MX_TIM14_Init();
   MX_TIM7_Init();
   /* USER CODE BEGIN 2 */
-	HAL_IWDG_Refresh(&hiwdg);
+	
 	BasicPoint(UART1RXCache);
+	HAL_IWDG_Refresh(&hiwdg);
+	
   /* USER CODE END 2 */
 
   /* USER CODE BEGIN RTOS_MUTEX */
@@ -224,7 +225,7 @@ int main(void)
   ControlTaskHandle = osThreadCreate(osThread(ControlTask), NULL);
 
   /* definition and creation of DisplayTask */
-  osThreadDef(DisplayTask, DisTask, osPriorityNormal, 0, 128);
+  osThreadDef(DisplayTask, DisTask, osPriorityAboveNormal, 0, 128);
   DisplayTaskHandle = osThreadCreate(osThread(DisplayTask), NULL);
 
   /* definition and creation of WaterDeepTask */
@@ -257,9 +258,8 @@ int main(void)
 
   /* Start scheduler */
   osKernelStart();
-  
+ 
   /* We should never get here as control is now taken by the scheduler */
-
   /* Infinite loop */
   /* USER CODE BEGIN WHILE */
     /* USER CODE END WHILE */
@@ -444,7 +444,7 @@ static void MX_TIM1_Init(void)
   htim1.Instance = TIM1;
   htim1.Init.Prescaler = 191;
   htim1.Init.CounterMode = TIM_COUNTERMODE_UP;
-  htim1.Init.Period = 49999;
+  htim1.Init.Period = 50000;
   htim1.Init.ClockDivision = TIM_CLOCKDIVISION_DIV1;
   htim1.Init.RepetitionCounter = 0;
   htim1.Init.AutoReloadPreload = TIM_AUTORELOAD_PRELOAD_DISABLE;
@@ -527,7 +527,7 @@ static void MX_TIM2_Init(void)
   htim2.Instance = TIM2;
   htim2.Init.Prescaler = 95;
   htim2.Init.CounterMode = TIM_COUNTERMODE_UP;
-  htim2.Init.Period = 49999;
+  htim2.Init.Period = 50000;
   htim2.Init.ClockDivision = TIM_CLOCKDIVISION_DIV1;
   htim2.Init.AutoReloadPreload = TIM_AUTORELOAD_PRELOAD_DISABLE;
   if (HAL_TIM_Base_Init(&htim2) != HAL_OK)
@@ -595,7 +595,7 @@ static void MX_TIM3_Init(void)
   htim3.Instance = TIM3;
   htim3.Init.Prescaler = 95;
   htim3.Init.CounterMode = TIM_COUNTERMODE_UP;
-  htim3.Init.Period = 49999;
+  htim3.Init.Period = 50000;
   htim3.Init.ClockDivision = TIM_CLOCKDIVISION_DIV1;
   htim3.Init.AutoReloadPreload = TIM_AUTORELOAD_PRELOAD_DISABLE;
   if (HAL_TIM_Base_Init(&htim3) != HAL_OK)
@@ -659,7 +659,7 @@ static void MX_TIM7_Init(void)
   htim7.Instance = TIM7;
   htim7.Init.Prescaler = 3839;
   htim7.Init.CounterMode = TIM_COUNTERMODE_UP;
-  htim7.Init.Period = 24999;
+  htim7.Init.Period = 25000;
   htim7.Init.AutoReloadPreload = TIM_AUTORELOAD_PRELOAD_ENABLE;
   if (HAL_TIM_Base_Init(&htim7) != HAL_OK)
   {
@@ -697,7 +697,7 @@ static void MX_TIM14_Init(void)
   htim14.Instance = TIM14;
   htim14.Init.Prescaler = 47;
   htim14.Init.CounterMode = TIM_COUNTERMODE_UP;
-  htim14.Init.Period = 4999;
+  htim14.Init.Period = 5000;
   htim14.Init.ClockDivision = TIM_CLOCKDIVISION_DIV1;
   htim14.Init.AutoReloadPreload = TIM_AUTORELOAD_PRELOAD_DISABLE;
   if (HAL_TIM_Base_Init(&htim14) != HAL_OK)
@@ -988,17 +988,6 @@ static void MX_GPIO_Init(void)
 /* USER CODE END Header_CtrlTask */
 void CtrlTask(void const * argument)
 {
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-
   /* USER CODE BEGIN 5 */
   /* Infinite loop */
   for(;;)
@@ -1087,33 +1076,47 @@ void DisTask(void const * argument)
 #endif // HardWare_QL800
 	  
 #ifdef HardWare_QL504
-	  PowerNum = ADCCache[0] / 4096 * 3.3 * 50;
 #ifdef SWPowerScanner
+	  PowerNum = ADCCache[0] * 0.040283203125;
+	  static u8 WarningState[2] = { 0, 0 };
 	  if (ADCCache[1] > 3100)
 	  {
-		  DisWarning_QL504(&huart2, hiwdg, 0);
-		  osDelay(5);
+		  if (WarningState[0] == 0)
+		  {
+			  DisWarning_QL504(&huart2, hiwdg, 0);
+			  WarningState[0] = 1;
+		  }
 	  }
 	  else
 	  {
-		  DisWarning_QL504(&huart2, hiwdg, 3);
-		  osDelay(5);
+		  if (WarningState[0] == 1)
+		  {
+			  DisWarning_QL504(&huart2, hiwdg, 3);
+			  WarningState[0] = 0;
+		  }
 	  }
 	  HAL_IWDG_Refresh(&hiwdg);
 	  if (ADCCache[2] > 3100)
 	  {
-		  DisWarning_QL504(&huart2, hiwdg, 1);
-		  osDelay(5);
+		  if (WarningState[1] == 0)
+		  {
+			  DisWarning_QL504(&huart2, hiwdg, 1);
+			  WarningState[1] = 1;
+		  }
 	  }
 	  else
 	  {
-		  DisWarning_QL504(&huart2, hiwdg, 4);
-		  osDelay(5);
+		  if (WarningState[1]==1)
+		  {
+			  DisWarning_QL504(&huart2, hiwdg, 4);
+			  WarningState[1] = 0;
+		  }
+		  
 	  }
 	  HAL_IWDG_Refresh(&hiwdg);
 #endif // SWPowerScanner
 
-	  DisData_QL504(&huart2, hiwdg, WaterDepthNum, WaterTempertureNum, EulResNum[0], EulResNum[1], PowerNum);
+	  DisData_QL504(&huart2, hiwdg, WaterDepthNum, WaterTempertureNum, EulResNum[1], EulResNum[2], PowerNum);
 	  
 #endif // HardWare_QL504
 
@@ -1138,7 +1141,7 @@ void WDTask(void const * argument)
   for(;;)
   {
 	  DeepAnalyze(UART4RXPosition, &WaterDepth, &WaterTemperture, WaterDepthNum, WaterTempertureNum);
-	  HAL_UART_Receive_DMA(&huart4, UART3RXCache, UART3RXLen);
+	  HAL_UART_Receive_DMA(&huart4, UART4RXCache, UART4RXLen);
 	  __HAL_UART_ENABLE_IT(&huart4, UART_IT_IDLE);
 	  HAL_IWDG_Refresh(&hiwdg);
 	  vTaskSuspend(WaterDeepTaskHandle);
@@ -1252,6 +1255,10 @@ void InitTask(void const * argument)
 	TIM3->CCR4 = 1500;
 	TIM14->CCR1 = 0;
 	HAL_TIM_Base_Start_IT(&htim7);
+#ifdef Debug_Mode
+	SystemBegin = 1;
+#endif // SWDebug
+
 	while (!SystemBegin)
 	{
 		HAL_IWDG_Refresh(&hiwdg);
@@ -1365,7 +1372,7 @@ void SWTask(void const * argument)
   /* USER CODE END SWTask */
 }
 
-/**
+ /**
   * @brief  Period elapsed callback in non blocking mode
   * @note   This function is called  when TIM10 interrupt took place, inside
   * HAL_TIM_IRQHandler(). It makes a direct call to HAL_IncTick() to increment

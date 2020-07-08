@@ -1,8 +1,8 @@
 underwater\timers.o: ../Middlewares/Third_Party/FreeRTOS/Source/timers.c
-underwater\timers.o: F:\keil\ARM\ARMCC\Bin\..\include\stdlib.h
+underwater\timers.o: D:\Keil_arm\ARM\ARMCC\Bin\..\include\stdlib.h
 underwater\timers.o: ../Middlewares/Third_Party/FreeRTOS/Source/include/FreeRTOS.h
-underwater\timers.o: F:\keil\ARM\ARMCC\Bin\..\include\stddef.h
-underwater\timers.o: F:\keil\ARM\ARMCC\Bin\..\include\stdint.h
+underwater\timers.o: D:\Keil_arm\ARM\ARMCC\Bin\..\include\stddef.h
+underwater\timers.o: D:\Keil_arm\ARM\ARMCC\Bin\..\include\stdint.h
 underwater\timers.o: ../Inc/FreeRTOSConfig.h
 underwater\timers.o: ../Middlewares/Third_Party/FreeRTOS/Source/include/projdefs.h
 underwater\timers.o: ../Middlewares/Third_Party/FreeRTOS/Source/include/portable.h

@@ -32,4 +32,7 @@
 //#define HardWare_QL800
 #define HardWare_QL504
 
+//调试模式
+//#define Debug_Mode
+
 #endif // !_SETTING_H

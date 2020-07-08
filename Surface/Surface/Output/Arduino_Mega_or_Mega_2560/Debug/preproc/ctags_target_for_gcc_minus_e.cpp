@@ -1,16 +1,17 @@
-# 1 "F:\\Emb\\OurEDA-S2L\\Surface\\Surface\\sketches\\Surface.ino"
-# 2 "F:\\Emb\\OurEDA-S2L\\Surface\\Surface\\sketches\\Surface.ino" 2
+# 1 "D:\\Emb\\S1ROV\\OurEDA-S2L\\Surface\\Surface\\sketches\\Surface.ino"
+# 1 "D:\\Emb\\S1ROV\\OurEDA-S2L\\Surface\\Surface\\sketches\\Surface.ino"
+# 2 "D:\\Emb\\S1ROV\\OurEDA-S2L\\Surface\\Surface\\sketches\\Surface.ino" 2
 
 //如要开启串口转发程序请取消注释掉下面的define,默认串口2
 //#define SerialTransmit
-# 14 "F:\\Emb\\OurEDA-S2L\\Surface\\Surface\\sketches\\Surface.ino"
+# 14 "D:\\Emb\\S1ROV\\OurEDA-S2L\\Surface\\Surface\\sketches\\Surface.ino"
 //方便使用的定义
 typedef unsigned char u8;
 typedef unsigned short u16;
 //模拟口数据采集定义
-# 26 "F:\\Emb\\OurEDA-S2L\\Surface\\Surface\\sketches\\Surface.ino"
+# 26 "D:\\Emb\\S1ROV\\OurEDA-S2L\\Surface\\Surface\\sketches\\Surface.ino"
 //数字口数据采集定义
-# 44 "F:\\Emb\\OurEDA-S2L\\Surface\\Surface\\sketches\\Surface.ino"
+# 44 "D:\\Emb\\S1ROV\\OurEDA-S2L\\Surface\\Surface\\sketches\\Surface.ino"
 //串口波特率
 
 

@@ -1,9 +1,9 @@
 underwater\queue.o: ../Middlewares/Third_Party/FreeRTOS/Source/queue.c
-underwater\queue.o: F:\keil\ARM\ARMCC\Bin\..\include\stdlib.h
-underwater\queue.o: F:\keil\ARM\ARMCC\Bin\..\include\string.h
+underwater\queue.o: D:\Keil_arm\ARM\ARMCC\Bin\..\include\stdlib.h
+underwater\queue.o: D:\Keil_arm\ARM\ARMCC\Bin\..\include\string.h
 underwater\queue.o: ../Middlewares/Third_Party/FreeRTOS/Source/include/FreeRTOS.h
-underwater\queue.o: F:\keil\ARM\ARMCC\Bin\..\include\stddef.h
-underwater\queue.o: F:\keil\ARM\ARMCC\Bin\..\include\stdint.h
+underwater\queue.o: D:\Keil_arm\ARM\ARMCC\Bin\..\include\stddef.h
+underwater\queue.o: D:\Keil_arm\ARM\ARMCC\Bin\..\include\stdint.h
 underwater\queue.o: ../Inc/FreeRTOSConfig.h
 underwater\queue.o: ../Middlewares/Third_Party/FreeRTOS/Source/include/projdefs.h
 underwater\queue.o: ../Middlewares/Third_Party/FreeRTOS/Source/include/portable.h

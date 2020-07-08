@@ -7,7 +7,7 @@ underwater\display_ql800.o: ../Drivers/STM32F4xx_HAL_Driver/Inc/stm32f4xx_hal_de
 underwater\display_ql800.o: ../Drivers/CMSIS/Device/ST/STM32F4xx/Include/stm32f4xx.h
 underwater\display_ql800.o: ../Drivers/CMSIS/Device/ST/STM32F4xx/Include/stm32f407xx.h
 underwater\display_ql800.o: ../Drivers/CMSIS/Include/core_cm4.h
-underwater\display_ql800.o: F:\keil\ARM\ARMCC\Bin\..\include\stdint.h
+underwater\display_ql800.o: D:\Keil_arm\ARM\ARMCC\Bin\..\include\stdint.h
 underwater\display_ql800.o: ../Drivers/CMSIS/Include/cmsis_version.h
 underwater\display_ql800.o: ../Drivers/CMSIS/Include/cmsis_compiler.h
 underwater\display_ql800.o: ../Drivers/CMSIS/Include/cmsis_armcc.h
@@ -15,7 +15,7 @@ underwater\display_ql800.o: ../Drivers/CMSIS/Include/mpu_armv7.h
 underwater\display_ql800.o: ../Drivers/CMSIS/Device/ST/STM32F4xx/Include/system_stm32f4xx.h
 underwater\display_ql800.o: ../Drivers/STM32F4xx_HAL_Driver/Inc/stm32f4xx_hal.h
 underwater\display_ql800.o: ../Drivers/STM32F4xx_HAL_Driver/Inc/Legacy/stm32_hal_legacy.h
-underwater\display_ql800.o: F:\keil\ARM\ARMCC\Bin\..\include\stddef.h
+underwater\display_ql800.o: D:\Keil_arm\ARM\ARMCC\Bin\..\include\stddef.h
 underwater\display_ql800.o: ../Drivers/STM32F4xx_HAL_Driver/Inc/stm32f4xx_hal_rcc_ex.h
 underwater\display_ql800.o: ../Drivers/STM32F4xx_HAL_Driver/Inc/stm32f4xx_hal_exti.h
 underwater\display_ql800.o: ../Drivers/STM32F4xx_HAL_Driver/Inc/stm32f4xx_hal_gpio.h

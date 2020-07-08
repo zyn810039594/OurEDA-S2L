@@ -3,7 +3,7 @@
 <title>Static Call Graph - [UnderWater\UnderWater.axf]</title></head>
 <body><HR>
 <H1>Static Call Graph for image UnderWater\UnderWater.axf</H1><HR>
-<BR><P>#&#060CALLGRAPH&#062# ARM Linker, 5060750: Last Updated: Fri Jun 05 22:03:06 2020
+<BR><P>#&#060CALLGRAPH&#062# ARM Linker, 5060750: Last Updated: Wed Jul 08 12:29:06 2020
 <BR><P>
 <H3>Maximum Stack Usage =        440 bytes + Unknown(Cycles, Untraceable Function Pointers)</H3><H3>
 Call chain for Maximum Stack Depth:</H3>
@@ -682,16 +682,17 @@ Global Symbols
 <BR>[Called By]<UL><LI><a href="#[78]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;WDTask
 </UL>
 
-<P><STRONG><a name="[9b]"></a>DisData_QL504</STRONG> (Thumb, 422 bytes, Stack size 88 bytes, display_ql504.o(i.DisData_QL504))
+<P><STRONG><a name="[9b]"></a>DisData_QL504</STRONG> (Thumb, 428 bytes, Stack size 88 bytes, display_ql504.o(i.DisData_QL504))
 <BR><BR>[Stack]<UL><LI>Max Depth = 184<LI>Call Chain = DisData_QL504 &rArr; SendNum_QL504 &rArr; osDelay &rArr; vTaskDelay &rArr; xTaskResumeAll &rArr; xTaskIncrementTick
 </UL>
-<BR>[Calls]<UL><LI><a href="#[9c]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;SendNum_QL504
+<BR>[Calls]<UL><LI><a href="#[94]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;osDelay
+<LI><a href="#[9c]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;SendNum_QL504
 </UL>
 <BR>[Called By]<UL><LI><a href="#[77]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;DisTask
 </UL>
 
-<P><STRONG><a name="[77]"></a>DisTask</STRONG> (Thumb, 194 bytes, Stack size 40 bytes, main.o(i.DisTask))
-<BR><BR>[Stack]<UL><LI>Max Depth = 224<LI>Call Chain = DisTask &rArr; DisData_QL504 &rArr; SendNum_QL504 &rArr; osDelay &rArr; vTaskDelay &rArr; xTaskResumeAll &rArr; xTaskIncrementTick
+<P><STRONG><a name="[77]"></a>DisTask</STRONG> (Thumb, 238 bytes, Stack size 32 bytes, main.o(i.DisTask))
+<BR><BR>[Stack]<UL><LI>Max Depth = 216<LI>Call Chain = DisTask &rArr; DisData_QL504 &rArr; SendNum_QL504 &rArr; osDelay &rArr; vTaskDelay &rArr; xTaskResumeAll &rArr; xTaskIncrementTick
 </UL>
 <BR>[Calls]<UL><LI><a href="#[94]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;osDelay
 <LI><a href="#[89]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;__aeabi_ui2d
@@ -1474,6 +1475,7 @@ Global Symbols
 <BR>[Calls]<UL><LI><a href="#[f9]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;vTaskDelay
 </UL>
 <BR>[Called By]<UL><LI><a href="#[9d]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;DisWarning_QL504
+<LI><a href="#[9b]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;DisData_QL504
 <LI><a href="#[78]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;WDTask
 <LI><a href="#[7d]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;SWTask
 <LI><a href="#[7c]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;InitTask
@@ -1785,7 +1787,7 @@ Local Symbols
 <BR>[Called By]<UL><LI><a href="#[68]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;main
 </UL>
 
-<P><STRONG><a name="[9c]"></a>SendNum_QL504</STRONG> (Thumb, 52 bytes, Stack size 24 bytes, display_ql504.o(i.SendNum_QL504))
+<P><STRONG><a name="[9c]"></a>SendNum_QL504</STRONG> (Thumb, 54 bytes, Stack size 24 bytes, display_ql504.o(i.SendNum_QL504))
 <BR><BR>[Stack]<UL><LI>Max Depth = 96<LI>Call Chain = SendNum_QL504 &rArr; osDelay &rArr; vTaskDelay &rArr; xTaskResumeAll &rArr; xTaskIncrementTick
 </UL>
 <BR>[Calls]<UL><LI><a href="#[94]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;osDelay

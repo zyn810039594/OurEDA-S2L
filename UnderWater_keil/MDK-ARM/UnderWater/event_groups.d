@@ -1,8 +1,8 @@
 underwater\event_groups.o: ../Middlewares/Third_Party/FreeRTOS/Source/event_groups.c
-underwater\event_groups.o: F:\keil\ARM\ARMCC\Bin\..\include\stdlib.h
+underwater\event_groups.o: D:\Keil_arm\ARM\ARMCC\Bin\..\include\stdlib.h
 underwater\event_groups.o: ../Middlewares/Third_Party/FreeRTOS/Source/include/FreeRTOS.h
-underwater\event_groups.o: F:\keil\ARM\ARMCC\Bin\..\include\stddef.h
-underwater\event_groups.o: F:\keil\ARM\ARMCC\Bin\..\include\stdint.h
+underwater\event_groups.o: D:\Keil_arm\ARM\ARMCC\Bin\..\include\stddef.h
+underwater\event_groups.o: D:\Keil_arm\ARM\ARMCC\Bin\..\include\stdint.h
 underwater\event_groups.o: ../Inc/FreeRTOSConfig.h
 underwater\event_groups.o: ../Middlewares/Third_Party/FreeRTOS/Source/include/projdefs.h
 underwater\event_groups.o: ../Middlewares/Third_Party/FreeRTOS/Source/include/portable.h

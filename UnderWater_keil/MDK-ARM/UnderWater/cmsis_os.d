@@ -1,9 +1,9 @@
 underwater\cmsis_os.o: ../Middlewares/Third_Party/FreeRTOS/Source/CMSIS_RTOS/cmsis_os.c
-underwater\cmsis_os.o: F:\keil\ARM\ARMCC\Bin\..\include\string.h
+underwater\cmsis_os.o: D:\Keil_arm\ARM\ARMCC\Bin\..\include\string.h
 underwater\cmsis_os.o: ../Middlewares/Third_Party/FreeRTOS/Source/CMSIS_RTOS/cmsis_os.h
 underwater\cmsis_os.o: ../Middlewares/Third_Party/FreeRTOS/Source/include/FreeRTOS.h
-underwater\cmsis_os.o: F:\keil\ARM\ARMCC\Bin\..\include\stddef.h
-underwater\cmsis_os.o: F:\keil\ARM\ARMCC\Bin\..\include\stdint.h
+underwater\cmsis_os.o: D:\Keil_arm\ARM\ARMCC\Bin\..\include\stddef.h
+underwater\cmsis_os.o: D:\Keil_arm\ARM\ARMCC\Bin\..\include\stdint.h
 underwater\cmsis_os.o: ../Inc/FreeRTOSConfig.h
 underwater\cmsis_os.o: ../Middlewares/Third_Party/FreeRTOS/Source/include/projdefs.h
 underwater\cmsis_os.o: ../Middlewares/Third_Party/FreeRTOS/Source/include/portable.h

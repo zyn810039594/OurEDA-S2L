@@ -1,8 +1,8 @@
 underwater\heap_4.o: ../Middlewares/Third_Party/FreeRTOS/Source/portable/MemMang/heap_4.c
-underwater\heap_4.o: F:\keil\ARM\ARMCC\Bin\..\include\stdlib.h
+underwater\heap_4.o: D:\Keil_arm\ARM\ARMCC\Bin\..\include\stdlib.h
 underwater\heap_4.o: ../Middlewares/Third_Party/FreeRTOS/Source/include/FreeRTOS.h
-underwater\heap_4.o: F:\keil\ARM\ARMCC\Bin\..\include\stddef.h
-underwater\heap_4.o: F:\keil\ARM\ARMCC\Bin\..\include\stdint.h
+underwater\heap_4.o: D:\Keil_arm\ARM\ARMCC\Bin\..\include\stddef.h
+underwater\heap_4.o: D:\Keil_arm\ARM\ARMCC\Bin\..\include\stdint.h
 underwater\heap_4.o: ../Inc/FreeRTOSConfig.h
 underwater\heap_4.o: ../Middlewares/Third_Party/FreeRTOS/Source/include/projdefs.h
 underwater\heap_4.o: ../Middlewares/Third_Party/FreeRTOS/Source/include/portable.h

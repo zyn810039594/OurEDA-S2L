@@ -2,12 +2,12 @@
 <EmbeddedProfile xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:xsd="http://www.w3.org/2001/XMLSchema">
   <ToolchainID>com.visualgdb.arm-eabi</ToolchainID>
   <ToolchainVersion>
-    <GCC>9.2.1</GCC>
-    <GDB>8.3.0</GDB>
+    <GCC>9.3.1</GCC>
+    <GDB>8.3.1</GDB>
     <Revision>1</Revision>
   </ToolchainVersion>
   <BspID>com.sysprogs.arm.stm32</BspID>
-  <BspVersion>2020.01</BspVersion>
+  <BspVersion>2020.06</BspVersion>
   <McuID>STM32F407VE</McuID>
   <MCUDefinitionFile>STM32F4xxxx/DeviceDefinitions/stm32f407xx.xml</MCUDefinitionFile>
   <MCUProperties>
@@ -48,7 +48,7 @@
     <AllDependencies>
       <ProjectDependency>
         <RelativePath>UnderWater.gpdsc</RelativePath>
-        <Timestamp>132330368871797021</Timestamp>
+        <Timestamp>132385732158997784</Timestamp>
       </ProjectDependency>
     </AllDependencies>
     <RootDirectory>
@@ -270,24 +270,10 @@
                   <RelativePath>Middlewares\Third_Party\FreeRTOS\Source\timers.c</RelativePath>
                 </VirtualFileSnapshot>
                 <VirtualFileSnapshot>
-                  <RelativePath>Middlewares\Third_Party\FreeRTOS\Source\portable\MemMang\heap_4.c</RelativePath>
-                </VirtualFileSnapshot>
-                <VirtualFileSnapshot>
                   <RelativePath>Middlewares\Third_Party\FreeRTOS\Source\portable\GCC\ARM_CM4F\port.c</RelativePath>
                 </VirtualFileSnapshot>
                 <VirtualFileSnapshot>
                   <RelativePath>Middlewares\Third_Party\FreeRTOS\Source\CMSIS_RTOS\cmsis_os.c</RelativePath>
-                </VirtualFileSnapshot>
-              </Files>
-            </VirtualDirectorySnapshot>
-            <VirtualDirectorySnapshot>
-              <Name>IWDG</Name>
-              <Files>
-                <VirtualFileSnapshot>
-                  <RelativePath>Drivers\STM32F4xx_HAL_Driver\Inc\stm32f4xx_hal_iwdg.h</RelativePath>
-                </VirtualFileSnapshot>
-                <VirtualFileSnapshot>
-                  <RelativePath>Drivers\STM32F4xx_HAL_Driver\Src\stm32f4xx_hal_iwdg.c</RelativePath>
                 </VirtualFileSnapshot>
               </Files>
             </VirtualDirectorySnapshot>
@@ -309,6 +295,17 @@
               </Files>
             </VirtualDirectorySnapshot>
             <VirtualDirectorySnapshot>
+              <Name>IWDG</Name>
+              <Files>
+                <VirtualFileSnapshot>
+                  <RelativePath>Drivers\STM32F4xx_HAL_Driver\Inc\stm32f4xx_hal_iwdg.h</RelativePath>
+                </VirtualFileSnapshot>
+                <VirtualFileSnapshot>
+                  <RelativePath>Drivers\STM32F4xx_HAL_Driver\Src\stm32f4xx_hal_iwdg.c</RelativePath>
+                </VirtualFileSnapshot>
+              </Files>
+            </VirtualDirectorySnapshot>
+            <VirtualDirectorySnapshot>
               <Name>CORTEX</Name>
               <Files>
                 <VirtualFileSnapshot>
@@ -316,23 +313,6 @@
                 </VirtualFileSnapshot>
                 <VirtualFileSnapshot>
                   <RelativePath>Drivers\STM32F4xx_HAL_Driver\Src\stm32f4xx_hal_cortex.c</RelativePath>
-                </VirtualFileSnapshot>
-              </Files>
-            </VirtualDirectorySnapshot>
-            <VirtualDirectorySnapshot>
-              <Name>TIM</Name>
-              <Files>
-                <VirtualFileSnapshot>
-                  <RelativePath>Drivers\STM32F4xx_HAL_Driver\Inc\stm32f4xx_hal_tim.h</RelativePath>
-                </VirtualFileSnapshot>
-                <VirtualFileSnapshot>
-                  <RelativePath>Drivers\STM32F4xx_HAL_Driver\Inc\stm32f4xx_hal_tim_ex.h</RelativePath>
-                </VirtualFileSnapshot>
-                <VirtualFileSnapshot>
-                  <RelativePath>Drivers\STM32F4xx_HAL_Driver\Src\stm32f4xx_hal_tim.c</RelativePath>
-                </VirtualFileSnapshot>
-                <VirtualFileSnapshot>
-                  <RelativePath>Drivers\STM32F4xx_HAL_Driver\Src\stm32f4xx_hal_tim_ex.c</RelativePath>
                 </VirtualFileSnapshot>
               </Files>
             </VirtualDirectorySnapshot>
@@ -350,6 +330,23 @@
                 </VirtualFileSnapshot>
                 <VirtualFileSnapshot>
                   <RelativePath>Drivers\STM32F4xx_HAL_Driver\Src\stm32f4xx_hal_dma.c</RelativePath>
+                </VirtualFileSnapshot>
+              </Files>
+            </VirtualDirectorySnapshot>
+            <VirtualDirectorySnapshot>
+              <Name>TIM</Name>
+              <Files>
+                <VirtualFileSnapshot>
+                  <RelativePath>Drivers\STM32F4xx_HAL_Driver\Inc\stm32f4xx_hal_tim.h</RelativePath>
+                </VirtualFileSnapshot>
+                <VirtualFileSnapshot>
+                  <RelativePath>Drivers\STM32F4xx_HAL_Driver\Inc\stm32f4xx_hal_tim_ex.h</RelativePath>
+                </VirtualFileSnapshot>
+                <VirtualFileSnapshot>
+                  <RelativePath>Drivers\STM32F4xx_HAL_Driver\Src\stm32f4xx_hal_tim.c</RelativePath>
+                </VirtualFileSnapshot>
+                <VirtualFileSnapshot>
+                  <RelativePath>Drivers\STM32F4xx_HAL_Driver\Src\stm32f4xx_hal_tim_ex.c</RelativePath>
                 </VirtualFileSnapshot>
               </Files>
             </VirtualDirectorySnapshot>
@@ -389,17 +386,16 @@
     </RootDirectory>
     <Configurations>
       <ImportedConfiguration>
-        <IsStaticLibrary>false</IsStaticLibrary>
         <Settings>
           <IncludeDirectories>
-            <string>F:\Emb\OurEDA-S2L\UnderWater\Inc</string>
-            <string>F:\Emb\OurEDA-S2L\UnderWater\Drivers\CMSIS\Include</string>
-            <string>F:\Emb\OurEDA-S2L\UnderWater\Drivers\CMSIS\Device\ST\STM32F4xx\Include</string>
-            <string>F:\Emb\OurEDA-S2L\UnderWater\Drivers\STM32F4xx_HAL_Driver\Inc</string>
-            <string>F:\Emb\OurEDA-S2L\UnderWater\Middlewares\Third_Party\FreeRTOS\Source\include</string>
-            <string>F:\Emb\OurEDA-S2L\UnderWater\Drivers\STM32F4xx_HAL_Driver\Inc\Legacy</string>
-            <string>F:\Emb\OurEDA-S2L\UnderWater\Middlewares\Third_Party\FreeRTOS\Source\portable\GCC\ARM_CM4F</string>
-            <string>F:\Emb\OurEDA-S2L\UnderWater\Middlewares\Third_Party\FreeRTOS\Source\CMSIS_RTOS</string>
+            <string>D:\Emb\S1ROV\OurEDA-S2L\UnderWater\Inc</string>
+            <string>D:\Emb\S1ROV\OurEDA-S2L\UnderWater\Drivers\CMSIS\Include</string>
+            <string>D:\Emb\S1ROV\OurEDA-S2L\UnderWater\Drivers\CMSIS\Device\ST\STM32F4xx\Include</string>
+            <string>D:\Emb\S1ROV\OurEDA-S2L\UnderWater\Drivers\STM32F4xx_HAL_Driver\Inc</string>
+            <string>D:\Emb\S1ROV\OurEDA-S2L\UnderWater\Middlewares\Third_Party\FreeRTOS\Source\include</string>
+            <string>D:\Emb\S1ROV\OurEDA-S2L\UnderWater\Drivers\STM32F4xx_HAL_Driver\Inc\Legacy</string>
+            <string>D:\Emb\S1ROV\OurEDA-S2L\UnderWater\Middlewares\Third_Party\FreeRTOS\Source\portable\GCC\ARM_CM4F</string>
+            <string>D:\Emb\S1ROV\OurEDA-S2L\UnderWater\Middlewares\Third_Party\FreeRTOS\Source\CMSIS_RTOS</string>
           </IncludeDirectories>
           <PreprocessorMacros>
             <string>$$com.sysprogs.bspoptions.primary_memory$$_layout</string>
