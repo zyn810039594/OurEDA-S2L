@@ -1079,7 +1079,7 @@ void DisTask(void const * argument)
 #ifdef SWPowerScanner
 	  PowerNum = ADCCache[0] * 0.040283203125;
 	  static u8 WarningState[2] = { 0, 0 };
-	  if (ADCCache[1] > 3100)
+	  if (ADCCache[1] > 2500)
 	  {
 		  if (WarningState[0] == 0)
 		  {
@@ -1096,7 +1096,7 @@ void DisTask(void const * argument)
 		  }
 	  }
 	  HAL_IWDG_Refresh(&hiwdg);
-	  if (ADCCache[2] > 3100)
+	  if (ADCCache[2] > 2500)
 	  {
 		  if (WarningState[1] == 0)
 		  {
@@ -1116,7 +1116,7 @@ void DisTask(void const * argument)
 	  HAL_IWDG_Refresh(&hiwdg);
 #endif // SWPowerScanner
 
-	  DisData_QL504(&huart2, hiwdg, WaterDepthNum, WaterTempertureNum, EulResNum[1], EulResNum[2], PowerNum);
+	  DisData_QL504(&huart2, hiwdg, WaterDepthNum, WaterTempertureNum, EulResNum[2], EulResNum[0], PowerNum);
 	  
 #endif // HardWare_QL504
 
