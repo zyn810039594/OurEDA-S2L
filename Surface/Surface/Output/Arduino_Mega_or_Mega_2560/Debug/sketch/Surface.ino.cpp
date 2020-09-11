@@ -1,6 +1,5 @@
 #include <Arduino.h>
 #line 1 "D:\\Emb\\S1ROV\\OurEDA-S2L\\Surface\\Surface\\sketches\\Surface.ino"
-#line 1 "D:\\Emb\\S1ROV\\OurEDA-S2L\\Surface\\Surface\\sketches\\Surface.ino"
 #include <FlexiTimer2.h>
 
 //如要开启串口转发程序请取消注释掉下面的define,默认串口2
@@ -9,7 +8,7 @@
 #ifdef SerialTransmit
 
 //转发串口波特率
-#define TransSerialBaud 921600
+#define TransSerialBaud 115200
 
 #endif // SerialTransmit
 
@@ -149,23 +148,29 @@ u8 RecBuf = 0;
 //回传延时标志位
 u8 LateBuf = 0;
 
+//机器人回传的数据
+u8 Serial2Data[38] = { 0 };
+
 //定时器中断
-#line 150 "D:\\Emb\\S1ROV\\OurEDA-S2L\\Surface\\Surface\\sketches\\Surface.ino"
+#line 153 "D:\\Emb\\S1ROV\\OurEDA-S2L\\Surface\\Surface\\sketches\\Surface.ino"
 void TimerInterrupt();
-#line 224 "D:\\Emb\\S1ROV\\OurEDA-S2L\\Surface\\Surface\\sketches\\Surface.ino"
+#line 230 "D:\\Emb\\S1ROV\\OurEDA-S2L\\Surface\\Surface\\sketches\\Surface.ino"
 void IOInit();
-#line 285 "D:\\Emb\\S1ROV\\OurEDA-S2L\\Surface\\Surface\\sketches\\Surface.ino"
+#line 291 "D:\\Emb\\S1ROV\\OurEDA-S2L\\Surface\\Surface\\sketches\\Surface.ino"
 void InfTake();
-#line 352 "D:\\Emb\\S1ROV\\OurEDA-S2L\\Surface\\Surface\\sketches\\Surface.ino"
+#line 359 "D:\\Emb\\S1ROV\\OurEDA-S2L\\Surface\\Surface\\sketches\\Surface.ino"
 void setup();
-#line 364 "D:\\Emb\\S1ROV\\OurEDA-S2L\\Surface\\Surface\\sketches\\Surface.ino"
+#line 371 "D:\\Emb\\S1ROV\\OurEDA-S2L\\Surface\\Surface\\sketches\\Surface.ino"
 void loop();
-#line 150 "D:\\Emb\\S1ROV\\OurEDA-S2L\\Surface\\Surface\\sketches\\Surface.ino"
+#line 153 "D:\\Emb\\S1ROV\\OurEDA-S2L\\Surface\\Surface\\sketches\\Surface.ino"
 void TimerInterrupt()
 {
-	if (LateBuf==3)
+	if (LateBuf > 4)
 	{
+		Serial.flush();
+		delay(1);
 		Serial.write(SendString, 23);
+		Serial.flush();
 		LateBuf = 0;
 	}
 	//自动夹取代码
@@ -298,14 +303,13 @@ void IOInit()
 //读取函数
 void InfTake()
 {
-	LateBuf = 0;
 	//模拟口读取
-	*PPortrait = (u16)analogRead(Portrait);
-	*PRotate = (u16)analogRead(Rotate);
-	*PVertical = (u16)analogRead(Vertical);
-	*PROver = (u16)analogRead(ROver);
-	*PLight = (u16)analogRead(Light);
-	*PPTZ = (u16)analogRead(PTZ);
+	u16 tPortrait = (u16)analogRead(Portrait);
+	u16 tRotate = (u16)analogRead(Rotate);
+	u16 tVertical = (u16)analogRead(Vertical);
+	u16 tROver = (u16)analogRead(ROver);
+	u16 tLight = (u16)analogRead(Light);
+	u16 tPTZ = (u16)analogRead(PTZ);
 	
 	//数字口读取
 	*PTransverse = (u8)digitalRead(Transverse);
@@ -325,39 +329,41 @@ void InfTake()
 	CFMode = FHandClip + FSemiautoClip * 2 + FAutoClip * 3;
 	
 	//简单处理
-	*PLight = (u16)map(((*PLight)*FLight), 0, 1024, LightLow, LightHigh);
+	*PLight = (u16)map(((tLight)*FLight), 0, 1024, LightLow, LightHigh);
 	*PGesture = (u8)(FGesture*(FPitch + 2*FRoll + 3*FPRMixed));
-	*PPortrait = (u16)map(*PPortrait, 0, 1024, PortraitLow, PortraitHigh);
-	*PRotate = (u16)map(*PRotate, 0, 1024, RotateLow, RotateHigh);
-	*PVertical = (u16)map(*PVertical, 0, 1024, VerticalLow, VerticalHigh);
-	*PROver = (u16)map(*PROver, 0, 1024, ROverHigh, ROverLow);
-	*PPTZ = (u16)map(*PPTZ, 0, 1024, PTZLow, PTZHigh);
+	*PPortrait = (u16)map(tPortrait, 0, 1024, PortraitLow, PortraitHigh);
+	*PRotate = (u16)map(tRotate, 0, 1024, RotateLow, RotateHigh);
+	*PVertical = (u16)map(tVertical, 0, 1024, VerticalLow, VerticalHigh);
+	*PROver = (u16)map(tROver, 0, 1024, ROverHigh, ROverLow);
+	*PPTZ = (u16)map(tPTZ, 0, 1024, PTZLow, PTZHigh);
+	u16 tClip = 0;
+	u16 tFlip = 0;
 	switch (CFMode)
 	{
 	case 1:
-		*PClip = (u16)analogRead(Clip);
-		*PFlip = (u16)analogRead(Flip);
-		*PClip = (u16)map(*PClip, 0, 1024, ClipLow, ClipHigh);
-		*PFlip = (u16)map(*PFlip, 0, 1024, FlipLow, FlipHigh);
+		tClip = (u16)analogRead(Clip);
+		tFlip = (u16)analogRead(Flip);
+		*PClip = (u16)map(tClip, 0, 1024, ClipLow, ClipHigh);
+		*PFlip = (u16)map(tFlip, 0, 1024, FlipLow, FlipHigh);
 		break;
 	case 2:
-		*PClip = (u16)analogRead(Clip);
-		*PClip = (u16)map(*PClip, 0, 1024, ClipLow, ClipHigh);
+		tClip = (u16)analogRead(Clip);
+		*PClip = (u16)map(tClip, 0, 1024, ClipLow, ClipHigh);
 		if (!CFStart)
 		{
 			CFStart = digitalRead(AutoclipSwitcher);
-			*PFlip = (u16)analogRead(Flip);
-			*PFlip = (u16)map(*PFlip, 0, 1024, FlipLow, FlipHigh);
+			tFlip = (u16)analogRead(Flip);
+			*PFlip = (u16)map(tFlip, 0, 1024, FlipLow, FlipHigh);
 		}
 		break;
 	case 3:
 		if (!CFStart)
 		{
-			*PClip = (u16)analogRead(Clip);
-			*PFlip = (u16)analogRead(Flip);
+			tClip = (u16)analogRead(Clip);
+			tFlip = (u16)analogRead(Flip);
 			CFStart = digitalRead(AutoclipSwitcher);
-			*PClip = (u16)map(*PClip, 0, 1024, ClipLow, ClipHigh);
-			*PFlip = (u16)map(*PFlip, 0, 1024, FlipLow, FlipHigh);
+			*PClip = (u16)map(tClip, 0, 1024, ClipLow, ClipHigh);
+			*PFlip = (u16)map(tFlip, 0, 1024, FlipLow, FlipHigh);
 		}
 		break;
 	}
@@ -378,19 +384,30 @@ void setup()
 void loop() 
 {
 	// put your main code here, to run repeatedly:
-	if(Serial.available() > 0)
+		if(Serial.available() > 0)
 	{
 #ifdef SerialTransmit
-		Serial2.print(Serial.read());
+		Serial2Data = Serial.read();
 #else
 		Serial.read();
 #endif // SerialTransmit
-
 		++CheckRec;
-		if (CheckRec==37)
+		if (CheckRec == 37)
 		{
 			CheckRec = 0;
+			LateBuf = 0;
+			Serial.flush();
+#ifdef SerialTransmit
+			Serial2.flush();
+#endif // SerialTransmit
+			delay(1);
 			Serial.write(SendString, 23);
+#ifndef SerialTransmit
+			Serial.flush();
+#else
+			Serial2.write(Send2Data, 37);
+			Serial2.flush();
+#endif // SerialTransmit
 			InfTake();
 		}
 	}

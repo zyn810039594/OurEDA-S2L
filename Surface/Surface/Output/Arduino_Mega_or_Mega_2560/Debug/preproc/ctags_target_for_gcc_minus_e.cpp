@@ -1,5 +1,4 @@
 # 1 "D:\\Emb\\S1ROV\\OurEDA-S2L\\Surface\\Surface\\sketches\\Surface.ino"
-# 1 "D:\\Emb\\S1ROV\\OurEDA-S2L\\Surface\\Surface\\sketches\\Surface.ino"
 # 2 "D:\\Emb\\S1ROV\\OurEDA-S2L\\Surface\\Surface\\sketches\\Surface.ino" 2
 
 //如要开启串口转发程序请取消注释掉下面的define,默认串口2
@@ -117,12 +116,18 @@ u8 RecBuf = 0;
 //回传延时标志位
 u8 LateBuf = 0;
 
+//机器人回传的数据
+u8 Serial2Data[38] = { 0 };
+
 //定时器中断
 void TimerInterrupt()
 {
- if (LateBuf==3)
+ if (LateBuf > 4)
  {
+  Serial.flush();
+  delay(1);
   Serial.write(SendString, 23);
+  Serial.flush();
   LateBuf = 0;
  }
  //自动夹取代码
@@ -255,14 +260,13 @@ void IOInit()
 //读取函数
 void InfTake()
 {
- LateBuf = 0;
  //模拟口读取
- *PPortrait = (u16)analogRead(A0);
- *PRotate = (u16)analogRead(A1);
- *PVertical = (u16)analogRead(A2);
- *PROver = (u16)analogRead(A3);
- *PLight = (u16)analogRead(A4);
- *PPTZ = (u16)analogRead(A5);
+ u16 tPortrait = (u16)analogRead(A0);
+ u16 tRotate = (u16)analogRead(A1);
+ u16 tVertical = (u16)analogRead(A2);
+ u16 tROver = (u16)analogRead(A3);
+ u16 tLight = (u16)analogRead(A4);
+ u16 tPTZ = (u16)analogRead(A5);
 
  //数字口读取
  *PTransverse = (u8)digitalRead(30);
@@ -282,39 +286,41 @@ void InfTake()
  CFMode = FHandClip + FSemiautoClip * 2 + FAutoClip * 3;
 
  //简单处理
- *PLight = (u16)map(((*PLight)*FLight), 0, 1024, 0, 4999);
+ *PLight = (u16)map(((tLight)*FLight), 0, 1024, 0, 4999);
  *PGesture = (u8)(FGesture*(FPitch + 2*FRoll + 3*FPRMixed));
- *PPortrait = (u16)map(*PPortrait, 0, 1024, 1075, 1925);
- *PRotate = (u16)map(*PRotate, 0, 1024, 1925, 1075);
- *PVertical = (u16)map(*PVertical, 0, 1024, 1925, 1075);
- *PROver = (u16)map(*PROver, 0, 1024, 1925, 1075);
- *PPTZ = (u16)map(*PPTZ, 0, 1024, 500, 2500);
+ *PPortrait = (u16)map(tPortrait, 0, 1024, 1075, 1925);
+ *PRotate = (u16)map(tRotate, 0, 1024, 1925, 1075);
+ *PVertical = (u16)map(tVertical, 0, 1024, 1925, 1075);
+ *PROver = (u16)map(tROver, 0, 1024, 1925, 1075);
+ *PPTZ = (u16)map(tPTZ, 0, 1024, 500, 2500);
+ u16 tClip = 0;
+ u16 tFlip = 0;
  switch (CFMode)
  {
  case 1:
-  *PClip = (u16)analogRead(A6);
-  *PFlip = (u16)analogRead(A7);
-  *PClip = (u16)map(*PClip, 0, 1024, 500, 2500);
-  *PFlip = (u16)map(*PFlip, 0, 1024, 500, 2500);
+  tClip = (u16)analogRead(A6);
+  tFlip = (u16)analogRead(A7);
+  *PClip = (u16)map(tClip, 0, 1024, 500, 2500);
+  *PFlip = (u16)map(tFlip, 0, 1024, 500, 2500);
   break;
  case 2:
-  *PClip = (u16)analogRead(A6);
-  *PClip = (u16)map(*PClip, 0, 1024, 500, 2500);
+  tClip = (u16)analogRead(A6);
+  *PClip = (u16)map(tClip, 0, 1024, 500, 2500);
   if (!CFStart)
   {
    CFStart = digitalRead(34);
-   *PFlip = (u16)analogRead(A7);
-   *PFlip = (u16)map(*PFlip, 0, 1024, 500, 2500);
+   tFlip = (u16)analogRead(A7);
+   *PFlip = (u16)map(tFlip, 0, 1024, 500, 2500);
   }
   break;
  case 3:
   if (!CFStart)
   {
-   *PClip = (u16)analogRead(A6);
-   *PFlip = (u16)analogRead(A7);
+   tClip = (u16)analogRead(A6);
+   tFlip = (u16)analogRead(A7);
    CFStart = digitalRead(34);
-   *PClip = (u16)map(*PClip, 0, 1024, 500, 2500);
-   *PFlip = (u16)map(*PFlip, 0, 1024, 500, 2500);
+   *PClip = (u16)map(tClip, 0, 1024, 500, 2500);
+   *PFlip = (u16)map(tFlip, 0, 1024, 500, 2500);
   }
   break;
  }
@@ -335,19 +341,30 @@ void setup()
 void loop()
 {
  // put your main code here, to run repeatedly:
- if(Serial.available() > 0)
+  if(Serial.available() > 0)
  {
 
 
 
   Serial.read();
 
-
   ++CheckRec;
-  if (CheckRec==37)
+  if (CheckRec == 37)
   {
    CheckRec = 0;
+   LateBuf = 0;
+   Serial.flush();
+
+
+
+   delay(1);
    Serial.write(SendString, 23);
+
+   Serial.flush();
+
+
+
+
    InfTake();
   }
  }

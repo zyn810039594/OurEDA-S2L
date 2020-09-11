@@ -30,7 +30,6 @@
       </MemoryWindowPreferences>
     </MemoryWindowPreferences>
     <LiveVariables />
-    <NestedLiveVariableSettings />
     <HardwareRegisters />
   </DebugPreferences>
 </VisualGDBUserPreferences>

@@ -1,11 +1,11 @@
 {
   "additionalFiles": "",
   "builtInLibrariesFolders": "D:\\Arduino\\libraries",
-  "customBuildProperties": "runtime.tools.avr-gcc.path=C:\\Users\\zyn77\\Documents\\ArduinoData\\packages\\arduino\\tools\\avr-gcc\\7.3.0-atmel3.6.1-arduino7,runtime.tools.avrdude.path=C:\\Users\\zyn77\\Documents\\ArduinoData\\packages\\arduino\\tools\\avrdude\\6.3.0-arduino17,runtime.tools.arduinoOTA.path=C:\\Users\\zyn77\\Documents\\ArduinoData\\packages\\arduino\\tools\\arduinoOTA\\1.3.0",
+  "builtInToolsFolders": "D:/Arduino/tools-builder,D:/Arduino/hardware/tools/avr,C:\\Users\\zyn77\\Documents/ArduinoData/packages",
+  "customBuildProperties": "runtime.tools.avr-gcc.path=C:\\Users\\zyn77\\Documents\\ArduinoData\\packages\\arduino\\tools\\avr-gcc\\7.3.0-atmel3.6.1-arduino7,runtime.tools.avrdude.path=C:\\Users\\zyn77\\Documents\\ArduinoData\\packages\\arduino\\tools\\avrdude\\6.3.0-arduino17,runtime.tools.arduinoOTA.path=C:\\Users\\zyn77\\Documents\\ArduinoData\\packages\\arduino\\tools\\arduinoOTA\\1.3.0,runtime.tools.ctags.path=C:\\Users\\zyn77\\AppData\\Local\\VisualGDB\\Arduino\\tools-builder\\ctags\\5.8-arduino11",
   "fqbn": "arduino:avr:mega:cpu=atmega2560",
   "hardwareFolders": "D:\\Arduino\\hardware,C:\\Users\\zyn77\\Documents\\ArduinoData\\packages",
   "otherLibrariesFolders": "C:\\Users\\zyn77\\Documents\\Arduino\\Libraries",
   "runtime.ide.version": "10600",
-  "sketchLocation": "D:\\Emb\\S1ROV\\OurEDA-S2L\\Surface\\Surface\\sketches\\Surface.ino",
-  "toolsFolders": "D:/Arduino/tools-builder,D:/Arduino/hardware/tools/avr,C:\\Users\\zyn77\\Documents/ArduinoData/packages"
+  "sketchLocation": "D:\\Emb\\S1ROV\\OurEDA-S2L\\Surface\\Surface\\sketches\\Surface.ino"
 }
